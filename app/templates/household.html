@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Household · savr{% endblock %}
+{% block content %}
+<h1>{{ hh.name }}</h1>
+<section class="panel">
+  <h2>Household code</h2>
+  <p class="code-big" id="hh-code">{{ hh.code }}</p>
+  <p class="fine">Everyone who enters this code shares the same ratings, pantry and meal plan. Treat it like a Wi-Fi password.</p>
+  <div class="actions">
+    <button class="btn" id="share-code">Share code</button>
+    <button class="btn" id="rename">Rename</button>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Who's using this phone?</h2>
+  <p class="fine">Ratings are saved per person, so savr can tell when the whole household likes something.</p>
+  <input id="member" placeholder="Your name, e.g. Sam" maxlength="30">
+</section>
+
+<section class="panel">
+  <h2>Join a different household</h2>
+  <form id="join-form" class="row-form">
+    <input name="code" placeholder="basil-otter-1234" autocapitalize="off" autocomplete="off">
+    <button class="btn primary">Join</button>
+  </form>
+  <button class="btn small" id="new-hh">Start a new household</button>
+</section>
+
+<section class="panel">
+  <h2>Writing style</h2>
+  <p class="fine">Standard reads like a normal recipe. Unhinged gives the same steps with a lot more swearing.</p>
+  {% include "_voice_toggle.html" %}
+</section>
+
+{% if kroger_enabled() %}
+<section class="panel">
+  <h2>Kroger pickup</h2>
+  {% if kroger_tok and kroger_tok.access_token %}
+  <p>Connected{% if kroger_tok.location_name %} · store: <b>{{ kroger_tok.location_name }}</b>{% endif %}.</p>
+  <button class="btn small" id="kroger-off">Disconnect</button>
+  {% else %}
+  <p class="fine">Works with Kroger, King Soopers, Ralphs, Fred Meyer, Smith's, Fry's and other Kroger stores.</p>
+  <a class="btn primary" href="/kroger/connect?next=/household">Connect Kroger account</a>
+  {% endif %}
+</section>
+{% endif %}
+
+<section class="panel">
+  <h2>Household favorites ({{ liked|length }})</h2>
+  {% if liked %}<ul class="link-list">{% for r in liked %}<li><a href="/recipe/{{ r.id }}">{{ r.name }}</a> <small>👍 {{ ratings[r.id].up }}{% if ratings[r.id].down %} · 👎 {{ ratings[r.id].down }}{% endif %}</small></li>{% endfor %}</ul>
+  {% else %}<p class="empty">Thumbs-up recipes and they'll show here and shape your picks and plans.</p>{% endif %}
+  {% if disliked %}<h2>Not again ({{ disliked|length }})</h2>
+  <ul class="link-list">{% for r in disliked %}<li><a href="/recipe/{{ r.id }}">{{ r.name }}</a></li>{% endfor %}</ul>{% endif %}
+</section>
+{% endblock %}
+{% block scripts %}<script>Household.init();</script>{% endblock %}

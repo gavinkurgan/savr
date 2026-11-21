@@ -1,0 +1,5 @@
+# One URL per line: recipe pages, category/listing pages, or sitemap.xml files.
+# Copy to sources.txt and run ./scripts/update-library.sh
+# Check each site's terms before scraping. savr respects robots.txt and rate-limits itself.
+# https://www.example.com/recipes/weeknight-dinners/
+# https://www.example.com/recipe-sitemap.xml

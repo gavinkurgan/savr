@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% from "_card.html" import card %}
+{% block content %}
+<form class="search" method="get" action="/">
+  <input type="search" name="q" value="{{ args.get('q','') }}" placeholder="Search recipes or ingredients…" aria-label="Search">
+  <div class="chips" role="group" aria-label="Meal type">
+    <a class="chip {{ 'on' if not args.get('meal_type') }}" href="?{{ {'q': args.get('q','')}|urlencode }}">All</a>
+    {% for m in meals %}
+    <label class="chip {{ 'on' if args.get('meal_type') == m }}"><input type="radio" name="meal_type" value="{{ m }}" {{ 'checked' if args.get('meal_type') == m }} onchange="this.form.submit()">{{ m|title }}</label>
+    {% endfor %}
+  </div>
+  <details class="filters" {{ 'open' if args.get('max_minutes') or args.get('max_difficulty') or selected_diets or args.get('cuisine') }}>
+    <summary>Filters</summary>
+    <div class="grid">
+      <label>Total time
+        <select name="max_minutes">
+          <option value="">Any</option>
+          {% for m in [15, 30, 45, 60, 90] %}<option value="{{ m }}" {{ 'selected' if args.get('max_minutes') == m|string }}>≤ {{ m }} min</option>{% endfor %}
+        </select></label>
+      <label>Hands-on time
+        <select name="max_active">
+          <option value="">Any</option>
+          {% for m in [10, 20, 30, 45] %}<option value="{{ m }}" {{ 'selected' if args.get('max_active') == m|string }}>≤ {{ m }} min</option>{% endfor %}
+        </select></label>
+      <label>Difficulty
+        <select name="max_difficulty">
+          <option value="">Any</option>
+          <option value="2" {{ 'selected' if args.get('max_difficulty') == '2' }}>Easy</option>
+          <option value="3" {{ 'selected' if args.get('max_difficulty') == '3' }}>Up to medium</option>
+          <option value="4" {{ 'selected' if args.get('max_difficulty') == '4' }}>Up to hard</option>
+        </select></label>
+      <label>Cuisine
+        <select name="cuisine">
+          <option value="">Any</option>
+          {% for c in facets.cuisines %}<option value="{{ c.value }}" {{ 'selected' if args.get('cuisine') == c.value }}>{{ c.value|title }} ({{ c.count }})</option>{% endfor %}
+        </select></label>
+      <label>Sort
+        <select name="sort">
+          {% for k, v in [('rating','Top rated'),('time','Fastest'),('difficulty','Easiest'),('newest','Newest')] %}
+          <option value="{{ k }}" {{ 'selected' if args.get('sort','rating') == k }}>{{ v }}</option>{% endfor %}
+        </select></label>
+      <label>Leave out
+        <input name="exclude" value="{{ args.get('exclude','') }}" placeholder="mushroom, cilantro"></label>
+    </div>
+    <fieldset class="diets"><legend>Dietary needs</legend>
+      {% for d in diet_filters %}
+      <label class="toggle"><input type="checkbox" name="tag" value="{{ d }}" {{ 'checked' if d in selected_diets }}> {{ DIET_LABELS[d] }}</label>
+      {% endfor %}
+    </fieldset>
+    <button class="btn" type="submit">Apply</button>
+  </details>
+</form>
+
+<p class="count">{{ results|length }} recipe{{ 's' if results|length != 1 }}</p>
+<section class="cards">
+  {% for r in results %}{{ card(r, rating=ratings.get(r.id)) }}{% else %}
+  <p class="empty">Nothing matches yet. Loosen a filter or try <a href="/recommend">Pick for me</a>.</p>
+  {% endfor %}
+</section>
+{% endblock %}

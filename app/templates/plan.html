@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% from "_card.html" import card %}
+{% block title %}Meal plan · savr{% endblock %}
+{% block content %}
+<h1>This week's plan</h1>
+<form id="plan-form" class="mood">
+  <textarea name="text" rows="2" placeholder="e.g. easy weeknight dinners, mostly under 45 minutes, one fish night, no pork">{{ plan.prefs.get('text', '') if plan else '' }}</textarea>
+  <div class="grid">
+    <label>Nights<select name="nights">{% for n in range(3, 8) %}<option value="{{ n }}" {{ 'selected' if (plan.nights if plan else 5) == n }}>{{ n }}</option>{% endfor %}</select></label>
+    <label>Servings each<input type="number" name="servings" min="1" max="20" placeholder="recipe default"></label>
+    <label>Max time (min)<input type="number" name="max_minutes" min="10" step="5" placeholder="any"></label>
+  </div>
+  <fieldset class="diets"><legend>Must be</legend>
+    {% for d in diet_filters %}<label class="toggle"><input type="checkbox" name="diet" value="{{ d }}" {{ 'checked' if plan and d in plan.prefs.get('diet', []) }}> {{ labels[d] }}</label>{% endfor %}
+  </fieldset>
+  <button class="btn primary" type="submit">{{ 'Plan a new week' if plan else 'Plan my week' }}</button>
+  <p class="fine">savr picks meals that fit, skips anything your household gave a thumbs-down, favors what's in your pantry,
+    and pairs recipes that share fresh ingredients so less goes to waste.</p>
+</form>
+
+{% if plan %}
+<section class="plan-days">
+  {% for d in plan.days if d.recipe_id in recipes %}
+  {% set r = recipes[d.recipe_id] %}
+  <div class="plan-day">
+    <div class="plan-date"><b>{{ d.label }}</b><small>{{ d.date[5:] }}</small></div>
+    {{ card(r, d.why) }}
+    <button class="btn small swap" data-slot="{{ d.slot }}" title="Swap this night">↻ Swap</button>
+  </div>
+  {% endfor %}
+</section>
+{% if plan.shared %}
+<div class="heard"><b>Shared ingredients (less waste):</b>
+  {% for s in plan.shared[:8] %}{{ s.item }} ×{{ s.recipes|length }}{{ ', ' if not loop.last }}{% endfor %}</div>
+{% endif %}
+{% set ns = namespace(items=[]) %}
+{% for d in plan.days if d.recipe_id in recipes %}{% set ns.items = ns.items + [{"id": d.recipe_id, "name": recipes[d.recipe_id].name, "servings": d.servings}] %}{% endfor %}
+<button class="btn primary" id="plan-to-cart" data-items='{{ ns.items|tojson }}'>Put the whole week in my cart</button>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script>Plan.init();</script>{% endblock %}

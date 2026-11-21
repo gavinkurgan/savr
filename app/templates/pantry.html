@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from "_card.html" import card %}
+{% block title %}Pantry · savr{% endblock %}
+{% block content %}
+<h1>Pantry</h1>
+<p class="lede">What's in your kitchen. savr uses this to skip things you already have when building a shopping list,
+  and to suggest recipes that use up what's about to go bad.</p>
+<form id="pantry-form" class="pantry-add">
+  <textarea name="items" rows="2" placeholder="spinach, eggs, cheddar, chicken thighs…" aria-label="Items to add"></textarea>
+  <div class="grid">
+    <label>Use by (optional)<input type="date" name="use_by"></label>
+  </div>
+  <button class="btn primary" type="submit">Add to pantry</button>
+</form>
+
+{% if items %}
+<ul class="pantry-list">
+  {% for p in items %}
+  <li class="{{ 'soon' if p.days_left is not none and p.days_left <= 3 }}{{ ' gone' if p.days_left is not none and p.days_left < 0 }}">
+    <span>{{ p.item }}</span>
+    {% if p.days_left is not none %}<small>{% if p.days_left < 0 %}expired{% elif p.days_left == 0 %}use today{% else %}{{ p.days_left }}d left{% endif %}</small>{% endif %}
+    <button data-remove="{{ p.id }}" aria-label="Remove {{ p.item }}">✕</button>
+  </li>
+  {% endfor %}
+</ul>
+
+<h2>What you can make</h2>
+<section class="cards">
+  {% for r in suggestions %}
+  {{ card(r, ['uses up your ' ~ r.pantry.uses_expiring|join(', ')] if r.pantry.uses_expiring else None, rating=ratings.get(r.id),
+          extra='Have ' ~ r.pantry.have|length ~ ' of ' ~ (r.pantry.have|length + r.pantry.missing|length) ~ (' · need ' ~ r.pantry.missing[:3]|join(', ') if r.pantry.missing else ' · you have everything!')) }}
+  {% else %}<p class="empty">Nothing matches yet. Add a few more things.</p>{% endfor %}
+</section>
+{% else %}
+<p class="empty">Your pantry is empty. Add what you have, or tap "Mark as bought" after building a shopping list.</p>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script>Pantry.init();</script>{% endblock %}

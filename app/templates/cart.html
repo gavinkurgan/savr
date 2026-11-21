@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Cart · savr{% endblock %}
+{% block content %}
+<h1>Cart → pickup order</h1>
+<section id="cart-recipes" class="cart-list"><p class="empty">Your cart is empty. Tap ＋ on any recipe, or plan your week.</p></section>
+
+<section id="cart-options" hidden>
+  <div class="grid">
+    <label class="toggle"><input type="checkbox" id="exclude-pantry" checked> Skip salt, pepper, water</label>
+    <label class="toggle"><input type="checkbox" id="use-pantry" checked> Skip what's in my pantry</label>
+    <label>Also already have<input id="have" placeholder="olive oil, garlic"></label>
+  </div>
+  <div class="actions"><button class="btn primary" id="build">Build shopping list</button>
+    <button class="btn small" id="clear-cart">Clear cart</button></div>
+</section>
+
+<section id="list-out" hidden>
+  <h2>Shopping list <small id="list-count"></small></h2>
+  <div id="shared-out"></div>
+  <div id="list-items"></div>
+
+  {% if kroger_enabled() %}
+  <div class="panel kroger" id="kroger-panel">
+    <h2>Kroger pickup</h2>
+    <div id="kroger-state"><p class="fine">Checking connection…</p></div>
+  </div>
+  {% endif %}
+
+  <h2>Or send it somewhere else</h2>
+  <div class="export">
+    <button class="btn" data-export="instacart">Instacart (many stores)</button>
+    <button class="btn" data-export="walmart">Walmart links</button>
+    <button class="btn" data-export="target">Target links</button>
+    <button class="btn" data-export="csv">Download CSV</button>
+    <button class="btn" data-export="text">Download checklist</button>
+    <button class="btn" data-export="share">Share / copy</button>
+  </div>
+  <div id="export-out"></div>
+
+  <div class="panel">
+    <h2>Got your groceries?</h2>
+    <p class="fine">Add everything on this list to your pantry so savr knows what you have.</p>
+    <button class="btn" id="bought">✓ Mark as bought</button>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script>Cart.renderPage({{ 'true' if kroger_enabled() else 'false' }});</script>{% endblock %}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="116" fill="#e4572e"/>
+  <text x="238" y="332" text-anchor="middle" font-family="Nunito, 'SF Pro Rounded', Arial Rounded MT Bold, Helvetica, Arial, sans-serif" font-weight="900" font-size="215" fill="#fff" letter-spacing="-12">savr</text>
+  <circle cx="432" cy="318" r="17" fill="#fff"/>
+</svg>

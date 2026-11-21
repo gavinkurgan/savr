@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}savr{% endblock %}</title>
+  <meta name="description" content="savr: top-rated recipes, simplified, straight to a pickup order.">
+  <meta name="theme-color" content="#e4572e">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <!-- iOS: installable via Share → Add to Home Screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="savr">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon-192.png') }}">
+  <link rel="icon" href="{{ url_for('static', filename='icon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script>try{if(localStorage.getItem('savr_voice')==='unhinged')document.documentElement.classList.add('voice-unhinged')}catch(e){}</script>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  {% set tabs = [('/', 'Browse', '⌕'), ('/recommend', 'Pick', '✦'), ('/plan', 'Plan', '▦'), ('/pantry', 'Pantry', '◫'), ('/cart', 'Cart', '🛒')] %}
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="savr home">sav<span>r</span></a>
+    <nav class="topnav">
+      {% for href, label, icon in tabs %}<a href="{{ href }}" class="{{ 'on' if request.path == href }}">{{ label }}{% if href == '/cart' %} <b class="cart-count" hidden></b>{% endif %}</a>{% endfor %}
+    </nav>
+    <a class="hh-chip" href="/household" title="Household settings" aria-label="Household settings">⌂</a>
+  </header>
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+  <nav class="tabbar" aria-label="Primary">
+    {% for href, label, icon in tabs %}<a href="{{ href }}" class="{{ 'on' if request.path == href }}"><span aria-hidden="true">{{ icon }}</span>{{ label }}{% if href == '/cart' %} <b class="cart-count" hidden></b>{% endif %}</a>{% endfor %}
+  </nav>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

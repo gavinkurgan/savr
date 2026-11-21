@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Cooking: {{ r.name }} · savr</title>
+  <meta name="theme-color" content="#14110f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script>try{if(localStorage.getItem('savr_voice')==='unhinged')document.documentElement.classList.add('voice-unhinged')}catch(e){}</script>
+</head>
+<body class="cook-body">
+  <header class="cook-top">
+    <a href="/recipe/{{ r.id }}" class="cook-exit" aria-label="Exit cook mode">✕</a>
+    <div class="cook-title">{{ r.name }}</div>
+    <button class="cook-ing-btn" id="ing-btn" aria-expanded="false">Ingredients</button>
+  </header>
+  <div class="cook-progress"><span id="progress"></span></div>
+
+  <main class="cook-stage" id="stage">
+    {% for s in r.steps %}
+    <section class="cook-step" data-i="{{ loop.index0 }}" {{ 'hidden' if not loop.first }}>
+      <p class="cook-count">Step {{ loop.index }} of {{ r.steps|length }}{% if s.section %} · {{ s.section }}{% endif %}</p>
+      <span class="act act-{{ s.action|lower }} big">{{ s.action }}</span>
+      <p class="cook-text v-std">{{ s.text }}</p>
+      <p class="cook-text v-unh">{{ s.unhinged or s.text }}</p>
+      {% if s.minutes %}<button class="timer big" data-minutes="{{ s.minutes }}" data-label="Step {{ loop.index }}">⏱ Start {{ s.minutes }} min timer</button>{% endif %}
+    </section>
+    {% endfor %}
+    <section class="cook-step done" data-i="{{ r.steps|length }}" hidden>
+      <p class="cook-text v-std">Done. Enjoy your {{ r.name }}.</p>
+      <p class="cook-text v-unh">You absolute legend. Go eat your damn {{ r.name }}.</p>
+      <div class="thumbs big" data-recipe="{{ r.id }}">
+        <p>Would your household make it again?</p>
+        <button class="thumb" data-vote="1">👍 Yes</button>
+        <button class="thumb" data-vote="-1">👎 Nope</button>
+      </div>
+    </section>
+  </main>
+
+  <aside class="cook-drawer" id="drawer" hidden>
+    <h2>Ingredients</h2>
+    <ul class="ingredients">{% for p in r.parsed_ingredients %}<li><label><input type="checkbox"> {{ p.raw }}</label></li>{% endfor %}</ul>
+    {% if r.equipment %}<h2>Equipment</h2><p>{{ r.equipment|join(', ') }}</p>{% endif %}
+  </aside>
+
+  <div id="timers" class="cook-timers" aria-live="polite"></div>
+  <footer class="cook-controls">
+    <button id="prev" class="btn" aria-label="Previous step">←</button>
+    <button id="speak" class="btn" aria-pressed="false" title="Read steps aloud">🔈</button>
+    <button id="listen" class="btn" aria-pressed="false" title="Voice control: say next, back, repeat, timer" hidden>🎙</button>
+    {% include "_voice_toggle.html" %}
+    <button id="next" class="btn primary" aria-label="Next step">Next →</button>
+  </footer>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <script>CookMode.init({{ r.steps|length }});</script>
+</body>
+</html>

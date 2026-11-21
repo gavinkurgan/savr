@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}{{ r.name }} · savr{% endblock %}
+{% block content %}
+<article class="recipe">
+  <h1>{{ r.name }}</h1>
+  {% if r.description %}<p class="lede">{{ r.description }}</p>{% endif %}
+  <p class="meta">
+    {% if r.rating %}<span class="stars">★ {{ '%.1f'|format(r.rating) }}</span> from {{ r.rating_count }} ratings · {% endif %}
+    {{ r.meal_type|title }} · {{ r.cuisine|title }}
+  </p>
+
+  <div class="stats">
+    <div><b class="diff d{{ r.difficulty }}">{{ r.difficulty_label }}</b><small>{{ r.difficulty }}/5 difficulty</small></div>
+    <div><b>{{ r.total_minutes|mins }}</b><small>total</small></div>
+    <div><b>{{ r.prep_minutes }}m</b><small>prep</small></div>
+    <div><b>{{ r.cook_minutes }}m</b><small>cook</small></div>
+    <div><b>{{ r.hands_off_minutes }}m</b><small>hands-off</small></div>
+  </div>
+  {% set tot = (r.prep_minutes + r.cook_minutes) or 1 %}
+  <div class="timebar big"><span class="prep" style="width: {{ (100 * r.prep_minutes / tot)|round(0) }}%">Prep</span><span class="cook" style="width: {{ (100 * r.cook_minutes / tot)|round(0) }}%">Cook</span></div>
+  <p class="fine">Why this rating: {{ r.difficulty_reasons|join('; ') }}. Times {{ r.time_source }}.</p>
+
+  <ul class="tags">
+    {% for t in r.diet_tags if t in ['gluten_free','dairy_free','egg_free','nut_free','vegetarian','vegan'] %}<li>{{ DIET_LABELS[t] }}</li>{% endfor %}
+  </ul>
+  {% if allergens %}
+  <p class="allergen"><b>Contains (detected):</b> {{ allergens|map('replace','_',' ')|join(', ') }}.
+    Detected from ingredient names only; always check labels if allergies are serious.</p>
+  {% else %}
+  <p class="allergen ok">No common allergens detected from ingredient names. Always check labels if allergies are serious.</p>
+  {% endif %}
+
+  <div class="actions">
+    <form method="get" class="servings">
+      <label>Servings
+        <button type="submit" name="servings" value="{{ [servings - 1, 1]|max }}" aria-label="Fewer">−</button>
+        <output>{{ servings }}</output>
+        <button type="submit" name="servings" value="{{ servings + 1 }}" aria-label="More">＋</button>
+      </label>
+    </form>
+    <div class="thumbs" data-recipe="{{ r.id }}" role="group" aria-label="Household rating">
+      <button class="thumb {{ 'on' if hh_rating.members.get('me', 0) > 0 }}" data-vote="1" aria-label="Thumbs up">👍 <small>{{ hh_rating.up or '' }}</small></button>
+      <button class="thumb {{ 'on' if hh_rating.members.get('me', 0) < 0 }}" data-vote="-1" aria-label="Thumbs down">👎 <small>{{ hh_rating.down or '' }}</small></button>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="btn" href="/recipe/{{ r.id }}/cook">▶ Cook mode</a>
+    <button class="btn primary" data-add="{{ r.id }}" data-name="{{ r.name }}" data-servings="{{ servings }}">Add to cart</button>
+  </div>
+
+  <div class="two-col">
+    <section>
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        {% for p in r.parsed_ingredients %}
+        <li><label><input type="checkbox">
+          {% if factor != 1 and p.scaled is not none %}<b>{{ p.scaled|qty }} {{ p.unit or '' }}</b> {{ p.item }}<small> ({{ p.raw }})</small>
+          {% else %}{{ p.raw }}{% endif %}
+        </label></li>
+        {% endfor %}
+      </ul>
+      {% if r.equipment %}
+      <h2>You'll need</h2>
+      <ul class="equipment">{% for e in r.equipment %}<li>{{ e }}</li>{% endfor %}</ul>
+      {% endif %}
+    </section>
+    <section>
+      <div class="steps-head">
+        <h2>Steps</h2>
+        {% include "_voice_toggle.html" %}
+      </div>
+      <ol class="steps">
+        {% for s in r.steps %}
+        {% if s.section and (loop.first or r.steps[loop.index0 - 1].section != s.section) %}<li class="section">{{ s.section }}</li>{% endif %}
+        <li class="step">
+          <span class="act act-{{ s.action|lower }}">{{ s.action }}</span>
+          <p class="v-std">{{ s.text }}</p>
+          <p class="v-unh">{{ s.unhinged or s.text }}</p>
+          {% if s.minutes %}<button class="timer" data-minutes="{{ s.minutes }}" data-label="{{ s.action }}">⏱ {{ s.minutes }} min</button>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+  </div>
+  <p class="fine">{% if r.url.startswith('https://sample.local') %}An original savr kitchen recipe.{% else %}Simplified from <a href="{{ r.url }}" rel="noopener" target="_blank">{{ r.source }}</a>{% if r.author %} by {{ r.author }}{% endif %}. Visit the original for photos and the full story.{% endif %}
+    {% if r.voice_source and r.voice_source.startswith('claude') %} Steps rewritten with Claude.{% endif %}</p>
+</article>
+{% endblock %}

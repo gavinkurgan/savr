@@ -1,0 +1,23 @@
+{% macro card(r, reasons=None, rating=None, extra=None) %}
+<article class="card">
+  <a class="card-link" href="/recipe/{{ r.id }}">
+    <div class="card-head">
+      <h3>{{ r.name }}{% if rating and rating.score > 0 %} <span class="loved" title="Your household liked this">♥</span>{% endif %}</h3>
+      {% if r.rating %}<span class="stars" title="{{ r.rating_count }} ratings">★ {{ '%.1f'|format(r.rating) }}<small>({{ r.rating_count }})</small></span>{% endif %}
+    </div>
+    <p class="meta">{{ r.meal_type|title }} · {{ r.cuisine|title }} · <span class="diff d{{ r.difficulty }}">{{ r.difficulty_label }}</span></p>
+    <div class="timebar" title="Prep {{ r.prep_minutes }} min / Cook {{ r.cook_minutes }} min">
+      {% set tot = (r.prep_minutes + r.cook_minutes) or 1 %}
+      <span class="prep" style="width: {{ (100 * r.prep_minutes / tot)|round(0) }}%"></span><span class="cook" style="width: {{ (100 * r.cook_minutes / tot)|round(0) }}%"></span>
+    </div>
+    <p class="times"><b>{{ r.total_minutes|mins }}</b> total · {{ r.prep_minutes }}m prep · {{ r.cook_minutes }}m cook{% if r.hands_off_minutes %} · {{ r.hands_off_minutes }}m hands-off{% endif %}</p>
+    {% if reasons %}<p class="why">{{ reasons|join(' · ') }}</p>{% endif %}
+    {% if extra %}<p class="why">{{ extra }}</p>{% endif %}
+    <ul class="tags">
+      {% for t in r.diet_tags if t in ['gluten_free','dairy_free','vegetarian','vegan','nut_free'] %}<li>{{ DIET_LABELS[t] }}</li>{% endfor %}
+      {% for s in r.styles %}<li class="style">{{ s }}</li>{% endfor %}
+    </ul>
+  </a>
+  <button class="add-btn" data-add="{{ r.id }}" data-name="{{ r.name }}" data-servings="{{ r.servings }}" aria-label="Add {{ r.name }} to cart">＋</button>
+</article>
+{% endmacro %}

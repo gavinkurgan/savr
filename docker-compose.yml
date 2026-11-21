@@ -1,0 +1,25 @@
+services:
+  savr:
+    build: .
+    image: savr:latest
+    ports:
+      - "${HOST_PORT:-8000}:8000"
+    environment:
+      SECRET_KEY: "${SECRET_KEY:?set SECRET_KEY in .env}"   # any long random string
+      COOKIE_SECURE: "${COOKIE_SECURE:-0}"                  # 1 when served over HTTPS
+      # Optional integrations
+      INSTACART_API_KEY: "${INSTACART_API_KEY:-}"
+      INSTACART_ENV: "${INSTACART_ENV:-development}"
+      KROGER_CLIENT_ID: "${KROGER_CLIENT_ID:-}"
+      KROGER_CLIENT_SECRET: "${KROGER_CLIENT_SECRET:-}"
+      KROGER_REDIRECT_URI: "${KROGER_REDIRECT_URI:-}"       # https://your-host/kroger/callback
+      # Developer CLI only (scrape / rewrite); the web app never calls these
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      MIN_RATING: "${MIN_RATING:-4.0}"
+      MIN_REVIEWS: "${MIN_REVIEWS:-5}"
+    volumes:
+      - savr-data:/data
+    restart: unless-stopped
+
+volumes:
+  savr-data:

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% from "_card.html" import card %}
+{% block title %}Pick for me · savr{% endblock %}
+{% block content %}
+<h1>What are you in the mood for?</h1>
+<form method="get" class="mood">
+  <textarea name="mood" rows="3" placeholder="e.g. I'm wiped out, want something cozy for dinner in under 40 minutes, gluten free, no mushrooms">{{ mood }}</textarea>
+  <div class="chips examples">
+    {% for ex in ["Lazy weeknight dinner, gluten free", "Quick vegetarian lunch under 20 minutes", "Fancy Italian date night", "Hands-off comfort food, no dairy", "Easy breakfast with eggs"] %}
+    <button type="button" class="chip" data-example="{{ ex }}">{{ ex }}</button>
+    {% endfor %}
+  </div>
+  <details class="filters" {{ 'open' if args.get('effort') or args.get('max_minutes') or args.getlist('diet') }}>
+    <summary>Or set it exactly</summary>
+    <div class="grid">
+      <label>Effort
+        <select name="effort"><option value="">From text</option>
+          {% for e in ['low','medium','high'] %}<option value="{{ e }}" {{ 'selected' if args.get('effort') == e }}>{{ e|title }}</option>{% endfor %}
+        </select></label>
+      <label>Max time (min)<input type="number" name="max_minutes" min="5" step="5" value="{{ args.get('max_minutes','') }}"></label>
+      <label>Meal
+        <select name="meal_type"><option value="">From text</option>
+          {% for m in meals %}<option value="{{ m }}" {{ 'selected' if args.get('meal_type') == m }}>{{ m|title }}</option>{% endfor %}
+        </select></label>
+      <label>How many picks<input type="number" name="limit" min="1" max="30" value="{{ limit }}"></label>
+    </div>
+    <fieldset class="diets"><legend>Must be</legend>
+      {% for d in diet_filters %}<label class="toggle"><input type="checkbox" name="diet" value="{{ d }}" {{ 'checked' if d in args.getlist('diet') }}> {{ labels[d] }}</label>{% endfor %}
+    </fieldset>
+  </details>
+  <button class="btn primary" type="submit">Find my top picks</button>
+</form>
+
+{% if prefs is not none %}
+<div class="heard">
+  <b>What I took from that:</b>
+  {% set bits = [] %}
+  {% if prefs.effort %}{% set _ = bits.append(prefs.effort ~ ' effort') %}{% endif %}
+  {% if prefs.max_minutes %}{% set _ = bits.append('≤ ' ~ prefs.max_minutes ~ ' min') %}{% endif %}
+  {% if prefs.meal_type %}{% set _ = bits.append(prefs.meal_type) %}{% endif %}
+  {% if prefs.cuisine %}{% set _ = bits.append(prefs.cuisine) %}{% endif %}
+  {% for d in prefs.diet %}{% set _ = bits.append(labels[d]) %}{% endfor %}
+  {% for s in prefs.styles %}{% set _ = bits.append(s) %}{% endfor %}
+  {% for x in prefs.exclude %}{% set _ = bits.append('no ' ~ x) %}{% endfor %}
+  {% for x in prefs.include %}{% set _ = bits.append('with ' ~ x) %}{% endfor %}
+  {{ bits|join(' · ') if bits else 'nothing specific, so these are the top-rated overall' }}
+</div>
+<section class="cards">
+  {% for r in results %}{{ card(r, r.match_reasons, rating=ratings.get(r.id)) }}{% else %}
+  <p class="empty">No recipes meet those dietary needs yet. Try loosening them.</p>
+  {% endfor %}
+</section>
+{% if results|length > 1 %}<button class="btn" id="add-all">Add all {{ results|length }} to cart</button>{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,1399 @@
+[
+ {
+  "@type": "Recipe",
+  "name": "One-Pan Lemon Garlic Chicken Thighs",
+  "description": "Crispy chicken thighs with a bright lemon-garlic pan sauce. This has been my family's go-to for years!",
+  "recipeCategory": "Dinner",
+  "recipeCuisine": "American",
+  "keywords": "weeknight, one pan, skillet",
+  "recipeYield": "4 servings",
+  "prepTime": "PT10M",
+  "cookTime": "PT30M",
+  "totalTime": "PT40M",
+  "aggregateRating": {
+   "ratingValue": "4.8",
+   "ratingCount": "1240"
+  },
+  "recipeIngredient": [
+   "6 bone-in, skin-on chicken thighs",
+   "1 teaspoon kosher salt",
+   "1/2 teaspoon black pepper",
+   "1 tablespoon olive oil",
+   "6 cloves garlic, minced",
+   "1 lemon, juiced",
+   "1/2 cup chicken broth",
+   "1 teaspoon dried thyme",
+   "2 tablespoons fresh parsley, chopped"
+  ],
+  "recipeInstructions": [
+   {
+    "@type": "HowToStep",
+    "text": "Preheat the oven to 425°F. Pat the chicken dry and season with salt and pepper. I always do this the night before, my kids love how crispy it gets!"
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Heat the olive oil in a large oven-safe skillet over medium-high heat. Sear chicken skin-side down for 6 minutes until golden, then flip."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Add the garlic and cook for 1 minute. Pour in the lemon juice and chicken broth and sprinkle with thyme."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Transfer the skillet to the oven and roast for 20 minutes until the chicken reaches 165°F."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Garnish with parsley and serve with the pan sauce. Enjoy!"
+   }
+  ]
+ },
+ {
+  "@type": "Recipe",
+  "name": "15-Minute Garlic Butter Shrimp",
+  "description": "Fast, buttery shrimp for busy nights.",
+  "recipeCategory": "Dinner",
+  "keywords": "quick, seafood",
+  "recipeYield": "3",
+  "prepTime": "PT5M",
+  "cookTime": "PT10M",
+  "aggregateRating": {
+   "ratingValue": "4.7",
+   "ratingCount": "860"
+  },
+  "recipeIngredient": [
+   "1 pound large shrimp, peeled and deveined",
+   "3 tablespoons butter",
+   "4 cloves garlic, minced",
+   "1/4 teaspoon red pepper flakes",
+   "1 tablespoon lemon juice",
+   "Salt and pepper to taste",
+   "2 tablespoons chopped parsley"
+  ],
+  "recipeInstructions": "Melt the butter in a large skillet over medium heat. Add garlic and red pepper flakes and cook 1 minute. Add shrimp in a single layer and cook 2 minutes per side until pink. Stir in lemon juice and season with salt and pepper. Sprinkle with parsley and serve."
+ },
+ {
+  "@type": "Recipe",
+  "name": "Classic Fluffy Buttermilk Pancakes",
+  "description": "Tall, tender pancakes for a lazy weekend breakfast.",
+  "recipeCategory": "Breakfast",
+  "recipeCuisine": "American",
+  "recipeYield": "4 servings",
+  "prepTime": "PT10M",
+  "cookTime": "PT15M",
+  "aggregateRating": {
+   "ratingValue": "4.9",
+   "ratingCount": "3100"
+  },
+  "recipeIngredient": [
+   "2 cups all-purpose flour",
+   "2 tablespoons sugar",
+   "2 teaspoons baking powder",
+   "1/2 teaspoon baking soda",
+   "1/2 teaspoon salt",
+   "2 cups buttermilk",
+   "2 large eggs",
+   "3 tablespoons butter, melted",
+   "1 teaspoon vanilla extract",
+   "Maple syrup, for serving"
+  ],
+  "recipeInstructions": [
+   {
+    "@type": "HowToStep",
+    "text": "Whisk the flour, sugar, baking powder, baking soda and salt in a large bowl."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "In another bowl, whisk the buttermilk, eggs, melted butter and vanilla. You'll want to make sure the butter isn't too hot or it'll scramble the eggs (trust me, I learned the hard way)."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Pour the wet ingredients into the dry and stir just until combined; a few lumps are fine. Let the batter rest 5 minutes."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Heat a griddle over medium heat and lightly grease it. Pour 1/3 cup batter per pancake and cook 2 to 3 minutes until bubbles form, then flip and cook 1 to 2 minutes more."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Serve warm with maple syrup."
+   }
+  ]
+ },
+ {
+  "@type": "Recipe",
+  "name": "Weeknight Black Bean Tacos",
+  "description": "Smoky, crunchy vegetarian tacos.",
+  "recipeCategory": "Dinner",
+  "recipeCuisine": "Mexican",
+  "keywords": "vegetarian, quick, tacos",
+  "recipeYield": "4",
+  "totalTime": "PT25M",
+  "aggregateRating": {
+   "ratingValue": "4.6",
+   "ratingCount": "540"
+  },
+  "recipeIngredient": [
+   "2 (15 oz) cans black beans, drained and rinsed",
+   "1 tablespoon olive oil",
+   "1 small onion, diced",
+   "2 cloves garlic, minced",
+   "1 teaspoon ground cumin",
+   "1 teaspoon chili powder",
+   "1/2 teaspoon smoked paprika",
+   "8 corn tortillas",
+   "1 avocado, sliced",
+   "1/2 cup salsa",
+   "1 lime, cut into wedges",
+   "1/4 cup fresh cilantro"
+  ],
+  "recipeInstructions": [
+   "Heat oil in a skillet over medium heat. Sauté onion for 5 minutes until soft.",
+   "Add garlic, cumin, chili powder and paprika and cook 1 minute. Stir in the beans with 1/4 cup water and simmer 5 minutes, mashing about half.",
+   "Warm the tortillas in a dry skillet for 30 seconds per side.",
+   "Fill tortillas with beans and top with avocado, salsa, cilantro and a squeeze of lime."
+  ]
+ },
+ {
+  "@type": "Recipe",
+  "name": "Creamy Tuscan White Bean Soup",
+  "description": "A cozy pot of beans, greens and parmesan.",
+  "recipeCategory": "Soup",
+  "recipeCuisine": "Italian",
+  "keywords": "comfort, one pot",
+  "recipeYield": "6",
+  "prepTime": "PT15M",
+  "cookTime": "PT30M",
+  "aggregateRating": {
+   "ratingValue": "4.7",
+   "ratingCount": "410"
+  },
+  "recipeIngredient": [
+   "2 tablespoons olive oil",
+   "1 onion, diced",
+   "2 carrots, diced",
+   "2 celery stalks, diced",
+   "4 cloves garlic, minced",
+   "2 (15 oz) cans cannellini beans, drained",
+   "4 cups vegetable broth",
+   "1 (14.5 oz) can diced tomatoes",
+   "1 teaspoon Italian seasoning",
+   "4 cups chopped kale",
+   "1/2 cup heavy cream",
+   "1/2 cup grated parmesan",
+   "Salt and pepper to taste"
+  ],
+  "recipeInstructions": [
+   {
+    "@type": "HowToStep",
+    "text": "Heat oil in a large pot over medium heat. Add onion, carrots and celery and cook 8 minutes until softened."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Stir in garlic and Italian seasoning and cook 1 minute."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Add beans, broth and tomatoes. Bring to a boil, then simmer 15 minutes."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Mash some beans against the pot to thicken. Stir in kale and cook 5 minutes until wilted."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Stir in cream and parmesan, season with salt and pepper, and serve."
+   }
+  ]
+ },
+ {
+  "@type": "Recipe",
+  "name": "Sheet Pan Salmon with Roasted Vegetables",
+  "description": "Healthy dinner with almost no cleanup.",
+  "recipeCategory": "Dinner",
+  "keywords": "sheet pan, healthy, gluten-free",
+  "recipeYield": "4",
+  "prepTime": "PT10M",
+  "cookTime": "PT25M",
+  "aggregateRating": {
+   "ratingValue": "4.6",
+   "ratingCount": "720"
+  },
+  "recipeIngredient": [
+   "4 salmon fillets (6 oz each)",
+   "1 pound baby potatoes, halved",
+   "1 bunch asparagus, trimmed",
+   "2 tablespoons olive oil",
+   "1 teaspoon garlic powder",
+   "1 teaspoon paprika",
+   "1 lemon, sliced",
+   "Salt and pepper to taste",
+   "2 tablespoons fresh dill"
+  ],
+  "recipeInstructions": "Preheat oven to 400°F. Toss potatoes with 1 tablespoon oil, salt and pepper on a sheet pan and roast 12 minutes. Push potatoes aside, add salmon and asparagus, drizzle with remaining oil and sprinkle with garlic powder and paprika. Top salmon with lemon slices. Roast 12 to 14 minutes until salmon flakes easily. Garnish with dill and serve."
+ },
+ {
+  "@type": "Recipe",
+  "name": "Slow Cooker Beef Chili",
+  "description": "Set it in the morning, dinner is waiting.",
+  "recipeCategory": "Dinner",
+  "recipeCuisine": "American",
+  "keywords": "slow cooker, comfort, hands-off",
+  "recipeYield": "8",
+  "prepTime": "PT20M",
+  "cookTime": "PT6H",
+  "aggregateRating": {
+   "ratingValue": "4.8",
+   "ratingCount": "2200"
+  },
+  "recipeIngredient": [
+   "2 pounds ground beef",
+   "1 onion, diced",
+   "1 green bell pepper, diced",
+   "3 cloves garlic, minced",
+   "2 (15 oz) cans kidney beans, drained",
+   "1 (28 oz) can crushed tomatoes",
+   "1 (15 oz) can tomato sauce",
+   "3 tablespoons chili powder",
+   "2 teaspoons ground cumin",
+   "1 teaspoon salt",
+   "1 cup shredded cheddar cheese, for serving",
+   "1/2 cup sour cream, for serving"
+  ],
+  "recipeInstructions": [
+   {
+    "@type": "HowToStep",
+    "text": "Brown the ground beef with the onion in a large skillet over medium-high heat for 8 minutes, breaking it up as it cooks. Drain the fat."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Transfer to the slow cooker and add pepper, garlic, beans, tomatoes, tomato sauce, chili powder, cumin and salt. Stir to combine."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Cover and cook on low for 6 hours."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Serve topped with cheddar and sour cream."
+   }
+  ]
+ },
+ {
+  "@type": "Recipe",
+  "name": "Thai Peanut Noodle Bowls",
+  "description": "Saucy noodles with crunchy vegetables.",
+  "recipeCategory": "Dinner",
+  "recipeCuisine": "Thai",
+  "keywords": "noodles, vegetarian",
+  "recipeYield": "4",
+  "totalTime": "PT30M",
+  "aggregateRating": {
+   "ratingValue": "4.5",
+   "ratingCount": "390"
+  },
+  "recipeIngredient": [
+   "8 ounces rice noodles",
+   "1/3 cup creamy peanut butter",
+   "3 tablespoons soy sauce",
+   "2 tablespoons rice vinegar",
+   "1 tablespoon honey",
+   "1 tablespoon sesame oil",
+   "1 tablespoon grated ginger",
+   "2 cloves garlic, minced",
+   "2 cups shredded red cabbage",
+   "1 red bell pepper, thinly sliced",
+   "2 carrots, julienned",
+   "3 green onions, sliced",
+   "1/4 cup chopped peanuts"
+  ],
+  "recipeInstructions": [
+   "Cook the rice noodles according to package directions, about 8 minutes. Drain and rinse with cold water.",
+   "Whisk peanut butter, soy sauce, vinegar, honey, sesame oil, ginger, garlic and 3 tablespoons warm water until smooth.",
+   "Toss the noodles with the sauce, cabbage, bell pepper and carrots.",
+   "Divide into bowls and top with green onions and peanuts."
+  ]
+ },
+ {
+  "@type": "Recipe",
+  "name": "Homemade Pasta Bolognese",
+  "description": "A slow, rich Sunday sauce worth the wait.",
+  "recipeCategory": "Dinner",
+  "recipeCuisine": "Italian",
+  "keywords": "project, sunday",
+  "recipeYield": "6",
+  "prepTime": "PT30M",
+  "cookTime": "PT3H",
+  "aggregateRating": {
+   "ratingValue": "4.9",
+   "ratingCount": "980"
+  },
+  "recipeIngredient": [
+   "2 tablespoons olive oil",
+   "2 tablespoons butter",
+   "1 onion, finely diced",
+   "1 carrot, finely diced",
+   "1 celery stalk, finely diced",
+   "4 ounces pancetta, diced",
+   "1 pound ground beef",
+   "1/2 pound ground pork",
+   "1 cup whole milk",
+   "1 cup dry white wine",
+   "1 (28 oz) can San Marzano tomatoes, crushed",
+   "2 tablespoons tomato paste",
+   "1 bay leaf",
+   "1 pound fresh tagliatelle",
+   "1/2 cup grated parmesan",
+   "Salt and pepper to taste"
+  ],
+  "recipeInstructions": [
+   {
+    "@type": "HowToSection",
+    "name": "Sauce",
+    "itemListElement": [
+     {
+      "@type": "HowToStep",
+      "text": "Melt butter with oil in a heavy pot over medium heat. Cook pancetta 5 minutes, then add onion, carrot and celery and cook 10 minutes until very soft."
+     },
+     {
+      "@type": "HowToStep",
+      "text": "Add the beef and pork and cook 10 minutes, breaking it up, until no longer pink."
+     },
+     {
+      "@type": "HowToStep",
+      "text": "Pour in the milk and simmer until it has almost completely evaporated, about 15 minutes. This is the secret my nonna swore by."
+     },
+     {
+      "@type": "HowToStep",
+      "text": "Add the wine and reduce by half, about 10 minutes. Deglaze any browned bits from the bottom of the pot."
+     },
+     {
+      "@type": "HowToStep",
+      "text": "Stir in tomatoes, tomato paste and bay leaf. Simmer uncovered on the lowest heat for 2 hours, stirring occasionally."
+     }
+    ]
+   },
+   {
+    "@type": "HowToSection",
+    "name": "Pasta",
+    "itemListElement": [
+     {
+      "@type": "HowToStep",
+      "text": "Boil the tagliatelle in well-salted water for 3 minutes. Reserve 1 cup pasta water and drain."
+     },
+     {
+      "@type": "HowToStep",
+      "text": "Toss the pasta with the sauce, adding pasta water as needed. Serve with parmesan."
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "@type": "Recipe",
+  "name": "Greek Chickpea Salad",
+  "description": "Fresh, crunchy, no-cook lunch.",
+  "recipeCategory": "Lunch, Salad",
+  "recipeCuisine": "Mediterranean",
+  "keywords": "no cook, healthy, vegetarian, gluten free",
+  "recipeYield": "4",
+  "prepTime": "PT15M",
+  "aggregateRating": {
+   "ratingValue": "4.7",
+   "ratingCount": "610"
+  },
+  "recipeIngredient": [
+   "2 (15 oz) cans chickpeas, drained and rinsed",
+   "1 English cucumber, diced",
+   "1 pint cherry tomatoes, halved",
+   "1/2 red onion, thinly sliced",
+   "1/2 cup kalamata olives",
+   "1/2 cup crumbled feta",
+   "3 tablespoons olive oil",
+   "2 tablespoons red wine vinegar",
+   "1 teaspoon dried oregano",
+   "Salt and pepper to taste"
+  ],
+  "recipeInstructions": "Chop the cucumber, halve the tomatoes and slice the onion. Whisk olive oil, vinegar, oregano, salt and pepper in a large bowl. Add chickpeas, vegetables and olives and toss. Top with feta and serve."
+ },
+ {
+  "@type": "Recipe",
+  "name": "Vegan Coconut Chickpea Curry",
+  "description": "Creamy, warming curry in one pot.",
+  "recipeCategory": "Dinner",
+  "recipeCuisine": "Indian",
+  "keywords": "vegan, one pot, comfort",
+  "recipeYield": "4",
+  "prepTime": "PT10M",
+  "cookTime": "PT25M",
+  "aggregateRating": {
+   "ratingValue": "4.8",
+   "ratingCount": "1530"
+  },
+  "recipeIngredient": [
+   "1 tablespoon coconut oil",
+   "1 onion, diced",
+   "3 cloves garlic, minced",
+   "1 tablespoon grated ginger",
+   "2 tablespoons curry powder",
+   "1 teaspoon garam masala",
+   "2 (15 oz) cans chickpeas, drained",
+   "1 (14 oz) can coconut milk",
+   "1 (14.5 oz) can diced tomatoes",
+   "3 cups baby spinach",
+   "1 lime, juiced",
+   "1 teaspoon salt",
+   "Cooked basmati rice, for serving"
+  ],
+  "recipeInstructions": [
+   "Heat coconut oil in a large pot over medium heat. Sauté onion 5 minutes.",
+   "Add garlic, ginger, curry powder and garam masala and cook 1 minute until fragrant.",
+   "Stir in chickpeas, coconut milk, tomatoes and salt. Simmer 15 minutes.",
+   "Stir in spinach until wilted, then add lime juice.",
+   "Serve over rice."
+  ]
+ },
+ {
+  "@type": "Recipe",
+  "name": "Fudgy One-Bowl Brownies",
+  "description": "Crackly tops, gooey middles.",
+  "recipeCategory": "Dessert",
+  "keywords": "chocolate, baking",
+  "recipeYield": "16",
+  "prepTime": "PT15M",
+  "cookTime": "PT28M",
+  "aggregateRating": {
+   "ratingValue": "4.9",
+   "ratingCount": "4200"
+  },
+  "recipeIngredient": [
+   "1/2 cup butter, melted",
+   "1 cup sugar",
+   "2 large eggs",
+   "1 teaspoon vanilla extract",
+   "1/3 cup cocoa powder",
+   "1/2 cup all-purpose flour",
+   "1/4 teaspoon salt",
+   "1/4 teaspoon baking powder",
+   "1/2 cup chocolate chips"
+  ],
+  "recipeInstructions": [
+   {
+    "@type": "HowToStep",
+    "text": "Preheat oven to 350°F and line an 8x8 pan with parchment."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Whisk melted butter and sugar, then beat in eggs and vanilla until glossy."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Stir in cocoa, flour, salt and baking powder just until combined. Fold in chocolate chips."
+   },
+   {
+    "@type": "HowToStep",
+    "text": "Spread in the pan and bake 25 to 28 minutes. Cool 30 minutes before cutting. Seriously, wait, they firm up as they cool!"
+   }
+  ]
+ },
+ {
+  "@type": "Recipe",
+  "name": "Spinach and Feta Egg Muffins",
+  "description": "Make-ahead breakfast you can grab and go.",
+  "recipeCategory": "Breakfast",
+  "keywords": "meal prep, gluten free, low carb",
+  "recipeYield": "12",
+  "prepTime": "PT10M",
+  "cookTime": "PT20M",
+  "aggregateRating": {
+   "ratingValue": "4.6",
+   "ratingCount": "330"
+  },
+  "recipeIngredient": [
+   "10 large eggs",
+   "1/4 cup milk",
+   "2 cups baby spinach, chopped",
+   "1/2 cup crumbled feta",
+   "1/2 red bell pepper, diced",
+   "1/2 teaspoon salt",
+   "1/4 teaspoon black pepper"
+  ],
+  "recipeInstructions": "Preheat oven to 350°F and grease a 12-cup muffin tin. Whisk eggs, milk, salt and pepper. Divide spinach, pepper and feta among the cups and pour egg mixture over. Bake 20 minutes until set. Cool 5 minutes before removing."
+ },
+ {
+  "@type": "Recipe",
+  "name": "Grilled Cheese and Tomato Soup",
+  "description": "The classic combo.",
+  "recipeCategory": "Lunch",
+  "recipeCuisine": "American",
+  "keywords": "comfort, quick",
+  "recipeYield": "2",
+  "totalTime": "PT25M",
+  "aggregateRating": {
+   "ratingValue": "3.6",
+   "ratingCount": "95"
+  },
+  "recipeIngredient": [
+   "4 slices sourdough bread",
+   "4 slices cheddar cheese",
+   "2 tablespoons butter, softened",
+   "1 (24 oz) jar tomato soup"
+  ],
+  "recipeInstructions": "Heat the soup in a saucepan over medium heat for 10 minutes. Butter the bread, add cheese and cook in a skillet 3 minutes per side until golden. Serve together."
+ },
+ {
+  "@type": "Recipe",
+  "name": "Beef and Broccoli Stir-Fry",
+  "description": "Better than takeout and faster too.",
+  "recipeCategory": "Dinner",
+  "recipeCuisine": "Chinese",
+  "keywords": "stir fry, quick",
+  "recipeYield": "4",
+  "prepTime": "PT15M",
+  "cookTime": "PT10M",
+  "aggregateRating": {
+   "ratingValue": "4.7",
+   "ratingCount": "1880"
+  },
+  "recipeIngredient": [
+   "1 pound flank steak, thinly sliced",
+   "1 tablespoon cornstarch",
+   "4 cups broccoli florets",
+   "2 tablespoons vegetable oil",
+   "3 cloves garlic, minced",
+   "1 tablespoon grated ginger",
+   "1/3 cup soy sauce",
+   "2 tablespoons brown sugar",
+   "1 tablespoon oyster sauce",
+   "1 teaspoon sesame oil",
+   "Cooked rice, for serving"
+  ],
+  "recipeInstructions": [
+   "Toss steak with cornstarch. Whisk soy sauce, brown sugar, oyster sauce, sesame oil and 1/4 cup water.",
+   "Heat 1 tablespoon oil in a wok over high heat. Stir-fry broccoli 3 minutes and remove.",
+   "Add remaining oil and sear the beef 2 minutes per side.",
+   "Add garlic and ginger for 30 seconds, return broccoli, pour in sauce and cook 2 minutes until glossy.",
+   "Serve over rice."
+  ]
+ },
+ {
+  "@type": "Recipe",
+  "name": "Overnight Oats with Berries",
+  "description": "Five minutes tonight, breakfast tomorrow.",
+  "recipeCategory": "Breakfast",
+  "keywords": "no cook, healthy, make ahead",
+  "recipeYield": "2",
+  "prepTime": "PT5M",
+  "totalTime": "PT8H5M",
+  "aggregateRating": {
+   "ratingValue": "4.5",
+   "ratingCount": "260"
+  },
+  "recipeIngredient": [
+   "1 cup rolled oats",
+   "1 cup almond milk",
+   "1/2 cup Greek yogurt",
+   "1 tablespoon chia seeds",
+   "1 tablespoon maple syrup",
+   "1 cup mixed berries"
+  ],
+  "recipeInstructions": "Stir oats, almond milk, yogurt, chia seeds and maple syrup in a jar. Cover and refrigerate for 8 hours or overnight. Top with berries and serve."
+ },
+ {
+  "@type": "Recipe",
+  "name": "Chicken Tikka Masala",
+  "description": "Restaurant-style, creamy and mildly spiced.",
+  "recipeCategory": "Dinner",
+  "keywords": "curry, comfort",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.8",
+   "ratingCount": "2650"
+  },
+  "recipeIngredient": [
+   "1 1/2 pounds boneless chicken thighs, cut into bite-size pieces",
+   "1/2 cup plain yogurt",
+   "1 tablespoon garam masala",
+   "2 teaspoons ground cumin",
+   "1 teaspoon salt",
+   "2 tablespoons butter",
+   "1 onion, diced",
+   "4 cloves garlic, minced",
+   "1 tablespoon grated ginger",
+   "1 (15 oz) can tomato sauce",
+   "1 cup heavy cream",
+   "1 teaspoon chili powder",
+   "1/4 cup fresh cilantro",
+   "Cooked basmati rice, for serving"
+  ],
+  "recipeInstructions": [
+   "Toss the chicken with yogurt, half the garam masala, the cumin and salt. Let it sit 15 minutes.",
+   "Melt butter in a large skillet over medium-high heat. Cook the chicken 6 minutes until browned, then remove.",
+   "Add onion and cook 5 minutes. Add garlic, ginger, chili powder and the rest of the garam masala and cook 1 minute.",
+   "Stir in tomato sauce and simmer 10 minutes. Stir in cream and return the chicken. Simmer 8 minutes until the chicken is cooked through.",
+   "Garnish with cilantro and serve over rice."
+  ],
+  "recipeCuisine": "Indian",
+  "prepTime": "PT20M",
+  "cookTime": "PT30M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Shrimp Fried Rice",
+  "description": "Better than takeout and a great use for leftover rice.",
+  "recipeCategory": "Dinner",
+  "keywords": "stir fry, leftovers, quick",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.7",
+   "ratingCount": "1120"
+  },
+  "recipeIngredient": [
+   "3 cups cooked rice, chilled",
+   "12 ounces shrimp, peeled",
+   "3 tablespoons vegetable oil",
+   "2 large eggs, beaten",
+   "1 cup frozen peas and carrots",
+   "3 green onions, sliced",
+   "3 cloves garlic, minced",
+   "3 tablespoons soy sauce",
+   "1 teaspoon sesame oil"
+  ],
+  "recipeInstructions": [
+   "Heat 1 tablespoon oil in a wok over high heat. Cook the shrimp 2 minutes per side and remove.",
+   "Add another tablespoon oil and scramble the eggs 1 minute, then remove.",
+   "Add remaining oil, peas and carrots and garlic and stir-fry 2 minutes.",
+   "Add the rice and press it into the wok. Cook 3 minutes without stirring so it crisps, then toss.",
+   "Stir in soy sauce, sesame oil, shrimp, eggs and green onions. Toss 1 minute and serve."
+  ],
+  "recipeCuisine": "Chinese",
+  "prepTime": "PT10M",
+  "cookTime": "PT15M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Baked Ziti",
+  "description": "Cheesy, saucy, feeds a crowd.",
+  "recipeCategory": "Dinner",
+  "keywords": "casserole, comfort, crowd",
+  "recipeYield": "8",
+  "aggregateRating": {
+   "ratingValue": "4.8",
+   "ratingCount": "1960"
+  },
+  "recipeIngredient": [
+   "1 pound ziti",
+   "1 pound Italian sausage",
+   "1 (24 oz) jar marinara sauce",
+   "15 ounces ricotta cheese",
+   "2 cups shredded mozzarella",
+   "1/2 cup grated parmesan",
+   "1 large egg",
+   "1 teaspoon Italian seasoning",
+   "Salt and pepper to taste"
+  ],
+  "recipeInstructions": [
+   "Preheat oven to 375°F. Boil the ziti 7 minutes, just under al dente, and drain.",
+   "Brown the sausage in a large skillet over medium-high heat for 8 minutes. Stir in the marinara.",
+   "Mix ricotta, egg, parmesan, Italian seasoning, salt and pepper in a bowl.",
+   "Toss the pasta with the sauce. Layer half in a 9x13 baking dish, dollop the ricotta mixture over it, and top with the remaining pasta.",
+   "Sprinkle with mozzarella, cover with foil and bake 20 minutes. Uncover and bake 15 minutes more until bubbly.",
+   "Let it rest 10 minutes before serving."
+  ],
+  "recipeCuisine": "Italian",
+  "prepTime": "PT15M",
+  "cookTime": "PT40M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Turkey Taco Lettuce Wraps",
+  "description": "All the taco flavor, none of the tortilla.",
+  "recipeCategory": "Dinner",
+  "keywords": "low carb, gluten free, quick, healthy",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.5",
+   "ratingCount": "410"
+  },
+  "recipeIngredient": [
+   "1 pound ground turkey",
+   "1 tablespoon olive oil",
+   "1 small onion, diced",
+   "2 teaspoons chili powder",
+   "1 teaspoon ground cumin",
+   "1/2 teaspoon garlic powder",
+   "1/2 teaspoon salt",
+   "1 head butter lettuce",
+   "1 cup cherry tomatoes, quartered",
+   "1 avocado, diced",
+   "1/2 cup shredded cheddar",
+   "1 lime, cut into wedges"
+  ],
+  "recipeInstructions": [
+   "Heat oil in a skillet over medium-high heat. Cook onion 3 minutes.",
+   "Add turkey and cook 7 minutes, breaking it up, until no longer pink.",
+   "Stir in chili powder, cumin, garlic powder, salt and 1/4 cup water. Simmer 2 minutes.",
+   "Spoon into lettuce leaves and top with tomatoes, avocado, cheddar and a squeeze of lime."
+  ],
+  "recipeCuisine": "Mexican",
+  "prepTime": "PT10M",
+  "cookTime": "PT12M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Lemon Herb Roast Chicken",
+  "description": "The weekend roast that makes the whole house smell amazing.",
+  "recipeCategory": "Dinner",
+  "keywords": "sunday, roast",
+  "recipeYield": "6",
+  "aggregateRating": {
+   "ratingValue": "4.9",
+   "ratingCount": "3400"
+  },
+  "recipeIngredient": [
+   "1 whole chicken (4 to 5 pounds)",
+   "3 tablespoons butter, softened",
+   "1 lemon, halved",
+   "1 head garlic, halved crosswise",
+   "4 sprigs fresh thyme",
+   "2 sprigs fresh rosemary",
+   "2 teaspoons kosher salt",
+   "1 teaspoon black pepper",
+   "1 pound carrots, cut into chunks",
+   "1 onion, cut into wedges"
+  ],
+  "recipeInstructions": [
+   "Preheat oven to 425°F. Pat the chicken very dry.",
+   "Rub butter all over the chicken and season inside and out with salt and pepper. Stuff the cavity with lemon, garlic, thyme and rosemary. Truss the legs with kitchen twine.",
+   "Scatter carrots and onion in a roasting pan and set the chicken on top.",
+   "Roast 1 hour 20 minutes, until the thickest part of the thigh reaches 165°F.",
+   "Rest the chicken 15 minutes before carving. Serve with the vegetables and pan juices."
+  ],
+  "recipeCuisine": "American",
+  "prepTime": "PT15M",
+  "cookTime": "PT1H30M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Pork Carnitas",
+  "description": "Crispy-edged, juicy, almost zero effort.",
+  "recipeCategory": "Dinner",
+  "keywords": "slow cooker, hands-off, tacos",
+  "recipeYield": "8",
+  "aggregateRating": {
+   "ratingValue": "4.8",
+   "ratingCount": "1750"
+  },
+  "recipeIngredient": [
+   "3 pounds boneless pork shoulder, cut into large chunks",
+   "2 teaspoons salt",
+   "1 tablespoon ground cumin",
+   "1 tablespoon dried oregano",
+   "1 onion, quartered",
+   "6 cloves garlic, smashed",
+   "2 oranges, juiced",
+   "2 limes, juiced",
+   "Corn tortillas, for serving",
+   "1/2 cup fresh cilantro",
+   "1/2 cup diced white onion"
+  ],
+  "recipeInstructions": [
+   "Rub the pork with salt, cumin and oregano.",
+   "Place the pork, onion and garlic in the slow cooker. Pour the orange and lime juice over it.",
+   "Cover and cook on low for 8 hours until the pork falls apart.",
+   "Shred the pork with two forks. Spread on a sheet pan and broil 5 minutes until the edges are crispy.",
+   "Serve in warm tortillas with cilantro and diced onion."
+  ],
+  "recipeCuisine": "Mexican",
+  "prepTime": "PT15M",
+  "cookTime": "PT8H0M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Pesto Pasta with Cherry Tomatoes",
+  "description": "Weeknight pasta in 20 minutes.",
+  "recipeCategory": "Dinner",
+  "keywords": "quick, vegetarian",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.6",
+   "ratingCount": "690"
+  },
+  "recipeIngredient": [
+   "12 ounces penne",
+   "1/2 cup basil pesto",
+   "2 cups cherry tomatoes, halved",
+   "1/2 cup grated parmesan",
+   "2 cups baby spinach",
+   "1 tablespoon olive oil",
+   "Salt and pepper to taste"
+  ],
+  "recipeInstructions": [
+   "Boil the penne for 11 minutes. Reserve 1/2 cup pasta water and drain.",
+   "Heat oil in the pot over medium heat and cook the tomatoes 3 minutes until they start to burst.",
+   "Add the pasta, spinach, pesto and a splash of pasta water and toss 1 minute until the spinach wilts.",
+   "Season with salt and pepper and top with parmesan."
+  ],
+  "recipeCuisine": "Italian",
+  "prepTime": "PT5M",
+  "cookTime": "PT15M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Black Bean Sweet Potato Chili",
+  "description": "Hearty and meat-free.",
+  "recipeCategory": "Dinner",
+  "keywords": "vegan, gluten free, one pot, healthy",
+  "recipeYield": "6",
+  "aggregateRating": {
+   "ratingValue": "4.7",
+   "ratingCount": "830"
+  },
+  "recipeIngredient": [
+   "2 tablespoons olive oil",
+   "1 onion, diced",
+   "1 red bell pepper, diced",
+   "3 cloves garlic, minced",
+   "2 medium sweet potatoes, peeled and diced",
+   "2 tablespoons chili powder",
+   "2 teaspoons ground cumin",
+   "1 teaspoon smoked paprika",
+   "2 (15 oz) cans black beans, drained",
+   "1 (28 oz) can diced tomatoes",
+   "2 cups vegetable broth",
+   "1 teaspoon salt",
+   "1 lime, juiced"
+  ],
+  "recipeInstructions": [
+   "Heat oil in a large pot over medium heat. Cook onion and bell pepper 6 minutes.",
+   "Add garlic, chili powder, cumin and paprika and cook 1 minute.",
+   "Add sweet potatoes, beans, tomatoes, broth and salt. Bring to a boil, then simmer 25 minutes until the sweet potatoes are tender.",
+   "Stir in lime juice and serve."
+  ],
+  "recipeCuisine": "American",
+  "prepTime": "PT15M",
+  "cookTime": "PT35M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Honey Garlic Salmon",
+  "description": "Sticky, sweet, ready in under 20.",
+  "recipeCategory": "Dinner",
+  "keywords": "quick, gluten free, healthy",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.8",
+   "ratingCount": "1420"
+  },
+  "recipeIngredient": [
+   "4 salmon fillets",
+   "3 tablespoons honey",
+   "2 tablespoons tamari",
+   "1 tablespoon lemon juice",
+   "3 cloves garlic, minced",
+   "1 tablespoon olive oil",
+   "Salt and pepper to taste",
+   "1 green onion, sliced"
+  ],
+  "recipeInstructions": [
+   "Whisk honey, tamari, lemon juice and garlic in a small bowl.",
+   "Season salmon with salt and pepper. Heat oil in a large skillet over medium-high heat and sear the salmon skin-side up for 4 minutes.",
+   "Flip, pour in the sauce and cook 4 minutes, spooning the sauce over the fish until it thickens.",
+   "Sprinkle with green onion and serve."
+  ],
+  "recipeCuisine": "American",
+  "prepTime": "PT5M",
+  "cookTime": "PT12M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Sausage and Peppers Sheet Pan",
+  "description": "One pan, three ingredients that matter.",
+  "recipeCategory": "Dinner",
+  "keywords": "sheet pan, gluten free, easy",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.6",
+   "ratingCount": "520"
+  },
+  "recipeIngredient": [
+   "1 1/2 pounds Italian sausage links",
+   "3 bell peppers, sliced",
+   "1 large onion, sliced",
+   "2 tablespoons olive oil",
+   "1 teaspoon Italian seasoning",
+   "1/2 teaspoon salt",
+   "1/4 teaspoon red pepper flakes"
+  ],
+  "recipeInstructions": [
+   "Preheat oven to 400°F.",
+   "Toss peppers and onion with oil, Italian seasoning, salt and red pepper flakes on a sheet pan. Nestle the sausages in.",
+   "Roast 30 minutes, flipping the sausages halfway, until browned and cooked through."
+  ],
+  "recipeCuisine": "Italian",
+  "prepTime": "PT10M",
+  "cookTime": "PT30M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Mushroom Risotto",
+  "description": "Creamy, earthy, worth the stirring.",
+  "recipeCategory": "Dinner",
+  "keywords": "date night, vegetarian, gluten free",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.7",
+   "ratingCount": "640"
+  },
+  "recipeIngredient": [
+   "6 cups vegetable broth",
+   "2 tablespoons olive oil",
+   "1 pound cremini mushrooms, sliced",
+   "1 shallot, minced",
+   "2 cloves garlic, minced",
+   "1 1/2 cups arborio rice",
+   "1/2 cup dry white wine",
+   "3 tablespoons butter",
+   "3/4 cup grated parmesan",
+   "2 tablespoons chopped parsley",
+   "Salt and pepper to taste"
+  ],
+  "recipeInstructions": [
+   "Warm the broth in a saucepan over low heat.",
+   "Heat oil in a large pot over medium-high heat. Cook mushrooms 6 minutes until browned, then remove.",
+   "Lower heat to medium. Cook shallot 2 minutes, add garlic and rice and toast 2 minutes.",
+   "Add wine and stir until absorbed. Add broth one ladle at a time, stirring often and waiting until each is absorbed, about 20 minutes total.",
+   "Stir in mushrooms, butter and parmesan. Season with salt and pepper, top with parsley and serve right away."
+  ],
+  "recipeCuisine": "Italian",
+  "prepTime": "PT15M",
+  "cookTime": "PT35M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Classic Smash Burgers",
+  "description": "Crispy edges, melty cheese, 20 minutes.",
+  "recipeCategory": "Dinner",
+  "keywords": "burger, grill, quick",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.8",
+   "ratingCount": "2100"
+  },
+  "recipeIngredient": [
+   "1 pound ground beef (80/20)",
+   "1 teaspoon salt",
+   "1/2 teaspoon black pepper",
+   "4 slices American cheese",
+   "4 burger buns",
+   "1 tablespoon butter",
+   "4 leaves lettuce",
+   "1 tomato, sliced",
+   "1/4 cup burger sauce or ketchup"
+  ],
+  "recipeInstructions": [
+   "Divide beef into 4 loose balls. Butter and toast the buns in a hot skillet 1 minute, then set aside.",
+   "Heat a cast iron skillet over high heat. Add a ball of beef and smash it flat with a spatula. Season with salt and pepper.",
+   "Cook 2 minutes until the edges are crispy, flip, add cheese and cook 1 minute.",
+   "Build the burgers with lettuce, tomato and sauce."
+  ],
+  "recipeCuisine": "American",
+  "prepTime": "PT10M",
+  "cookTime": "PT10M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Avocado Toast with Jammy Eggs",
+  "description": "Five ingredients, big upgrade.",
+  "recipeCategory": "Breakfast",
+  "keywords": "quick, vegetarian",
+  "recipeYield": "2",
+  "aggregateRating": {
+   "ratingValue": "4.6",
+   "ratingCount": "380"
+  },
+  "recipeIngredient": [
+   "2 large eggs",
+   "2 slices sourdough bread",
+   "1 ripe avocado",
+   "1/2 lemon, juiced",
+   "1/4 teaspoon red pepper flakes",
+   "Salt and pepper to taste"
+  ],
+  "recipeInstructions": [
+   "Boil the eggs for 7 minutes, then move them to ice water for 2 minutes and peel.",
+   "Toast the bread.",
+   "Mash avocado with lemon juice, salt and pepper and spread on the toast.",
+   "Halve the eggs, lay them on top and sprinkle with red pepper flakes."
+  ],
+  "prepTime": "PT5M",
+  "cookTime": "PT7M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Banana Oat Blender Muffins",
+  "description": "Everything goes in the blender.",
+  "recipeCategory": "Breakfast",
+  "keywords": "gluten free, make ahead, kid friendly",
+  "recipeYield": "12",
+  "aggregateRating": {
+   "ratingValue": "4.6",
+   "ratingCount": "720"
+  },
+  "recipeIngredient": [
+   "3 ripe bananas",
+   "2 large eggs",
+   "2 cups gluten-free rolled oats",
+   "1/2 cup Greek yogurt",
+   "1/4 cup maple syrup",
+   "1 teaspoon baking powder",
+   "1/2 teaspoon baking soda",
+   "1 teaspoon vanilla extract",
+   "1/2 cup chocolate chips"
+  ],
+  "recipeInstructions": [
+   "Preheat oven to 375°F and grease a 12-cup muffin tin.",
+   "Blend everything except the chocolate chips until smooth, about 1 minute. Stir in the chocolate chips.",
+   "Fill the muffin cups and bake 18 minutes until a toothpick comes out clean.",
+   "Cool 10 minutes before removing."
+  ],
+  "prepTime": "PT10M",
+  "cookTime": "PT18M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Breakfast Burritos",
+  "description": "Make a batch on Sunday, breakfast all week.",
+  "recipeCategory": "Breakfast",
+  "keywords": "make ahead, freezer",
+  "recipeYield": "6",
+  "aggregateRating": {
+   "ratingValue": "4.7",
+   "ratingCount": "560"
+  },
+  "recipeIngredient": [
+   "1 pound breakfast sausage",
+   "8 large eggs",
+   "1/4 cup milk",
+   "2 cups frozen hash browns",
+   "1 1/2 cups shredded cheddar",
+   "6 large flour tortillas",
+   "1/2 cup salsa"
+  ],
+  "recipeInstructions": [
+   "Brown the sausage in a large skillet for 8 minutes, then remove.",
+   "Cook the hash browns in the same skillet 8 minutes until crispy.",
+   "Whisk eggs and milk, pour into the skillet and scramble 3 minutes until just set.",
+   "Divide eggs, sausage, hash browns, cheese and salsa among the tortillas and roll them up tightly.",
+   "Eat now, or wrap in foil and freeze up to 3 months."
+  ],
+  "recipeCuisine": "Mexican",
+  "prepTime": "PT15M",
+  "cookTime": "PT20M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Chicken Caesar Wraps",
+  "description": "Caesar salad you can eat with one hand.",
+  "recipeCategory": "Lunch",
+  "keywords": "quick, lunch box",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.5",
+   "ratingCount": "300"
+  },
+  "recipeIngredient": [
+   "2 boneless chicken breasts",
+   "1 tablespoon olive oil",
+   "1/2 teaspoon salt",
+   "1/4 teaspoon black pepper",
+   "1 large head romaine, chopped",
+   "1/2 cup Caesar dressing",
+   "1/2 cup grated parmesan",
+   "4 large flour tortillas",
+   "1 cup croutons, crushed"
+  ],
+  "recipeInstructions": [
+   "Season chicken with salt and pepper. Heat oil in a skillet over medium-high heat and cook 5 minutes per side until 165°F inside.",
+   "Rest 5 minutes, then slice.",
+   "Toss romaine with dressing, parmesan and croutons.",
+   "Fill the tortillas with salad and chicken and roll up."
+  ],
+  "prepTime": "PT15M",
+  "cookTime": "PT10M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Caprese Sandwich",
+  "description": "Summer between two slices of bread.",
+  "recipeCategory": "Lunch",
+  "keywords": "no cook, vegetarian, quick",
+  "recipeYield": "2",
+  "aggregateRating": {
+   "ratingValue": "4.5",
+   "ratingCount": "240"
+  },
+  "recipeIngredient": [
+   "1 small ciabatta loaf, halved",
+   "4 ounces fresh mozzarella, sliced",
+   "1 large tomato, sliced",
+   "1/4 cup fresh basil leaves",
+   "2 tablespoons basil pesto",
+   "1 tablespoon balsamic glaze",
+   "Salt and pepper to taste"
+  ],
+  "recipeInstructions": [
+   "Spread pesto on the cut sides of the bread.",
+   "Layer mozzarella, tomato and basil. Season with salt and pepper and drizzle with balsamic glaze.",
+   "Close, cut in half and serve."
+  ],
+  "recipeCuisine": "Italian",
+  "prepTime": "PT10M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Chicken Noodle Soup",
+  "description": "Cozy, classic, cures what ails you.",
+  "recipeCategory": "Soup",
+  "keywords": "comfort, sick day",
+  "recipeYield": "6",
+  "aggregateRating": {
+   "ratingValue": "4.8",
+   "ratingCount": "1870"
+  },
+  "recipeIngredient": [
+   "2 tablespoons butter",
+   "1 onion, diced",
+   "3 carrots, sliced",
+   "3 celery stalks, sliced",
+   "3 cloves garlic, minced",
+   "8 cups chicken broth",
+   "1 1/2 pounds boneless chicken breasts",
+   "1 teaspoon dried thyme",
+   "1 bay leaf",
+   "3 cups egg noodles",
+   "2 tablespoons chopped parsley",
+   "Salt and pepper to taste"
+  ],
+  "recipeInstructions": [
+   "Melt butter in a large pot over medium heat. Cook onion, carrots and celery 7 minutes.",
+   "Add garlic and cook 1 minute. Add broth, chicken, thyme and bay leaf and bring to a boil.",
+   "Simmer 15 minutes until the chicken is cooked. Remove the chicken and shred it.",
+   "Add noodles and simmer 8 minutes. Return the chicken, stir in parsley and season with salt and pepper."
+  ],
+  "recipeCuisine": "American",
+  "prepTime": "PT15M",
+  "cookTime": "PT35M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Roasted Tomato Basil Soup",
+  "description": "Roasting is the whole secret.",
+  "recipeCategory": "Soup",
+  "keywords": "vegetarian, gluten free, comfort",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.6",
+   "ratingCount": "450"
+  },
+  "recipeIngredient": [
+   "3 pounds Roma tomatoes, halved",
+   "1 onion, quartered",
+   "6 cloves garlic",
+   "3 tablespoons olive oil",
+   "1 teaspoon salt",
+   "2 cups vegetable broth",
+   "1/2 cup fresh basil",
+   "1/2 cup heavy cream"
+  ],
+  "recipeInstructions": [
+   "Preheat oven to 425°F. Toss tomatoes, onion and garlic with oil and salt on a sheet pan.",
+   "Roast 35 minutes until soft and charred at the edges.",
+   "Transfer to a pot with the broth and basil and blend until smooth.",
+   "Stir in cream and simmer 5 minutes."
+  ],
+  "prepTime": "PT10M",
+  "cookTime": "PT40M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Garlic Parmesan Roasted Broccoli",
+  "description": "The broccoli kids actually eat.",
+  "recipeCategory": "Side",
+  "keywords": "side dish, gluten free, vegetarian, quick",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.7",
+   "ratingCount": "610"
+  },
+  "recipeIngredient": [
+   "2 pounds broccoli florets",
+   "3 tablespoons olive oil",
+   "3 cloves garlic, minced",
+   "1/2 teaspoon salt",
+   "1/3 cup grated parmesan",
+   "1/2 lemon, juiced"
+  ],
+  "recipeInstructions": [
+   "Preheat oven to 425°F.",
+   "Toss broccoli with oil, garlic and salt on a sheet pan.",
+   "Roast 20 minutes until the edges are crispy.",
+   "Sprinkle with parmesan and lemon juice and serve."
+  ],
+  "prepTime": "PT5M",
+  "cookTime": "PT20M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Crispy Smashed Potatoes",
+  "description": "Creamy inside, shatter-crisp outside.",
+  "recipeCategory": "Side",
+  "keywords": "side dish, vegan, gluten free",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.8",
+   "ratingCount": "930"
+  },
+  "recipeIngredient": [
+   "2 pounds baby potatoes",
+   "1/4 cup olive oil",
+   "1 teaspoon kosher salt",
+   "1/2 teaspoon black pepper",
+   "1 teaspoon garlic powder",
+   "2 tablespoons chopped parsley"
+  ],
+  "recipeInstructions": [
+   "Boil potatoes in salted water for 20 minutes until fork-tender. Drain.",
+   "Preheat oven to 450°F. Spread potatoes on an oiled sheet pan and smash each one flat with a glass.",
+   "Drizzle with oil and season with salt, pepper and garlic powder.",
+   "Roast 25 minutes until deeply golden and crispy. Sprinkle with parsley."
+  ],
+  "prepTime": "PT5M",
+  "cookTime": "PT45M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Classic Chocolate Chip Cookies",
+  "description": "Chewy center, crisp edges.",
+  "recipeCategory": "Dessert",
+  "keywords": "cookies, baking, kid friendly",
+  "recipeYield": "24",
+  "aggregateRating": {
+   "ratingValue": "4.9",
+   "ratingCount": "5200"
+  },
+  "recipeIngredient": [
+   "1 cup butter, softened",
+   "3/4 cup sugar",
+   "3/4 cup brown sugar",
+   "2 large eggs",
+   "2 teaspoons vanilla extract",
+   "2 1/4 cups all-purpose flour",
+   "1 teaspoon baking soda",
+   "1 teaspoon salt",
+   "2 cups chocolate chips"
+  ],
+  "recipeInstructions": [
+   "Preheat oven to 375°F and line baking sheets with parchment.",
+   "Beat butter and both sugars 2 minutes until fluffy. Beat in eggs and vanilla.",
+   "Mix in flour, baking soda and salt until just combined. Stir in chocolate chips.",
+   "Scoop 2-tablespoon balls onto the sheets, 2 inches apart.",
+   "Bake 10 to 11 minutes until the edges are golden. Cool on the sheet 5 minutes."
+  ],
+  "recipeCuisine": "American",
+  "prepTime": "PT15M",
+  "cookTime": "PT11M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "No-Bake Peanut Butter Energy Bites",
+  "description": "Snack-drawer staple.",
+  "recipeCategory": "Dessert",
+  "keywords": "no cook, snack, gluten free, vegetarian",
+  "recipeYield": "16",
+  "aggregateRating": {
+   "ratingValue": "4.6",
+   "ratingCount": "480"
+  },
+  "recipeIngredient": [
+   "1 cup gluten-free rolled oats",
+   "1/2 cup creamy peanut butter",
+   "1/3 cup honey",
+   "1/2 cup mini chocolate chips",
+   "2 tablespoons ground flaxseed",
+   "1 teaspoon vanilla extract"
+  ],
+  "recipeInstructions": [
+   "Stir everything together in a bowl until combined.",
+   "Chill 30 minutes so it's easier to roll.",
+   "Roll into 1-inch balls and store in the fridge."
+  ],
+  "prepTime": "PT10M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Spinach Artichoke Dip",
+  "description": "The dip that disappears first.",
+  "recipeCategory": "Appetizer",
+  "keywords": "party, dip, vegetarian, gluten free",
+  "recipeYield": "8",
+  "aggregateRating": {
+   "ratingValue": "4.7",
+   "ratingCount": "1150"
+  },
+  "recipeIngredient": [
+   "8 ounces cream cheese, softened",
+   "1/2 cup sour cream",
+   "1/4 cup mayonnaise",
+   "1 (14 oz) can artichoke hearts, drained and chopped",
+   "10 ounces frozen spinach, thawed and squeezed dry",
+   "1 cup shredded mozzarella",
+   "1/2 cup grated parmesan",
+   "2 cloves garlic, minced"
+  ],
+  "recipeInstructions": [
+   "Preheat oven to 375°F.",
+   "Mix cream cheese, sour cream and mayonnaise until smooth. Stir in artichokes, spinach, garlic, half the mozzarella and the parmesan.",
+   "Spread in a small baking dish and top with the remaining mozzarella.",
+   "Bake 25 minutes until bubbly and golden. Serve with chips or bread."
+  ],
+  "recipeCuisine": "American",
+  "prepTime": "PT10M",
+  "cookTime": "PT25M"
+ },
+ {
+  "@type": "Recipe",
+  "name": "Mediterranean Quinoa Bowls",
+  "description": "Four lunches, one effort.",
+  "recipeCategory": "Lunch",
+  "keywords": "meal prep, vegan, gluten free, healthy",
+  "recipeYield": "4",
+  "aggregateRating": {
+   "ratingValue": "4.6",
+   "ratingCount": "370"
+  },
+  "recipeIngredient": [
+   "1 cup quinoa",
+   "2 cups water",
+   "1 (15 oz) can chickpeas, drained",
+   "1 English cucumber, diced",
+   "1 cup cherry tomatoes, halved",
+   "1/4 cup kalamata olives",
+   "1/4 red onion, thinly sliced",
+   "1/2 cup hummus",
+   "3 tablespoons olive oil",
+   "2 tablespoons lemon juice",
+   "1 teaspoon dried oregano",
+   "Salt and pepper to taste"
+  ],
+  "recipeInstructions": [
+   "Rinse quinoa, then simmer in the water covered for 15 minutes. Fluff and cool.",
+   "Whisk oil, lemon juice, oregano, salt and pepper.",
+   "Divide quinoa among bowls and top with chickpeas, cucumber, tomatoes, olives and onion.",
+   "Drizzle with dressing and add a scoop of hummus."
+  ],
+  "recipeCuisine": "Mediterranean",
+  "prepTime": "PT15M",
+  "cookTime": "PT15M"
+ }
+]

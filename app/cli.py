@@ -6,6 +6,7 @@
     python -m app.cli scrape-sites my_sites.txt --per-site 20 --only allrecipes.com,seriouseats.com
     python -m app.cli refresh                 # re-check ratings of everything scraped
     python -m app.cli rewrite --llm           # Claude rewrite (needs ANTHROPIC_API_KEY)
+    python -m app.cli reprocess               # re-apply cleanups offline (no re-scrape)
     python -m app.cli samples                 # (re)build the bundled original recipes
     python -m app.cli remove "Soggy Casserole"
     python -m app.cli stats
@@ -22,7 +23,7 @@ import os
 import sys
 
 from .library import DEFAULT_LIBRARY, Library, sync_library
-from .pipeline import process_recipe
+from .pipeline import process_recipe, reprocess_recipe
 from .rewrite import apply_rewrite
 from .scraper import (DEFAULT_MIN_RATING, PoliteFetcher, crawl, crawl_sites, group_by_site, parse_rating,
                       passes_rating, read_sources, scrape_url)
@@ -157,6 +158,21 @@ def cmd_refresh(args, fetch=None) -> int:
     return 0
 
 
+def cmd_reprocess(args) -> int:
+    """Re-apply offline cleanups (cuisine, hands-off time, difficulty) to every recipe."""
+    from collections import Counter
+    lib = Library(args.library)
+    changed: Counter = Counter()
+    for rec in lib.recipes:
+        before = {k: rec.get(k) for k in ("cuisine", "active_minutes", "hands_off_minutes", "difficulty")}
+        reprocess_recipe(rec)
+        for k, v in before.items():
+            changed[k] += rec.get(k) != v
+    lib.save()
+    print(f"reprocessed {len(lib.recipes)} recipes in {args.library}; changed: {dict(changed)}")
+    return 0
+
+
 def cmd_rewrite(args) -> int:
     lib = Library(args.library)
     if args.llm and not os.environ.get("ANTHROPIC_API_KEY"):
@@ -271,6 +287,9 @@ def build_parser() -> argparse.ArgumentParser:
     w.add_argument("--only-missing", action="store_true", help="skip recipes already rewritten by Claude")
     w.add_argument("--limit", type=int, default=0)
     w.set_defaults(func=cmd_rewrite)
+
+    sub.add_parser("reprocess", help="re-apply cleanups (cuisine, hands-off time, difficulty) without re-scraping"
+                   ).set_defaults(func=cmd_reprocess)
 
     sm = sub.add_parser("samples", help="(re)build bundled original recipes")
     sm.add_argument("--min-rating", type=float, default=DEFAULT_MIN_RATING)

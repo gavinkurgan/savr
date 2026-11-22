@@ -13,6 +13,9 @@ import os
 
 DEFAULT_LIBRARY = os.path.join(os.path.dirname(__file__), "data", "library.json")
 LIBRARY_VERSION = 2
+# Bump when sync_library starts transforming recipes differently, so databases
+# that already loaded an unchanged library.json pick up the change.
+SYNC_VERSION = 2
 
 
 class Library:
@@ -67,16 +70,18 @@ def file_sha(path: str) -> str | None:
 
 
 def sync_library(db, path: str = DEFAULT_LIBRARY, force: bool = False, prune: bool = True) -> int:
-    """Upsert the library into the DB if the file changed. Returns recipes synced."""
+    """Load the library into the DB if the file (or the sync logic) changed.
+    Returns the number of recipes synced (0 when already up to date)."""
+    from .tagger import normalize_cuisine
     sha = file_sha(path)
     if sha is None:
         return 0
-    if not force and db.get_meta("library_sha") == sha:
+    version = f"{sha}:{SYNC_VERSION}"
+    if not force and db.get_meta("library_sha") == version:
         return 0
     lib = Library(path)
     for r in lib.recipes:
-        db.upsert(r)
-    if prune:
-        db.prune_except({r["url"] for r in lib.recipes})
-    db.set_meta("library_sha", sha)
-    return len(lib.recipes)
+        r["cuisine"] = normalize_cuisine(r)
+    if force:
+        db.set_meta("library_sha", "")
+    return len(lib.recipes) if db.replace_library(lib.recipes, version, prune=prune) else 0

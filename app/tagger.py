@@ -39,6 +39,58 @@ CUISINES = {
     "korean": ["korean", "gochujang", "kimchi", "bulgogi", "bibimbap"],
 }
 
+# Cuisines a site's recipeCuisine may name, as alias -> canonical. Anything else
+# (keyword spam like "Bacon Cuisine Potato Cuisine…", diet labels, "Western",
+# "General") is ignored and the cuisine is inferred from the recipe instead.
+CUISINE_ALIASES = {
+    **{k: k for k in CUISINES},
+    "greek": "greek", "vietnamese": "vietnamese", "spanish": "spanish", "german": "german",
+    "british": "british", "irish": "irish", "caribbean": "caribbean", "cajun": "cajun",
+    "creole": "cajun", "louisiana": "cajun", "southern": "southern", "soul food": "southern",
+    "middle eastern": "middle eastern", "lebanese": "middle eastern", "moroccan": "middle eastern",
+    "turkish": "middle eastern", "persian": "middle eastern", "israeli": "middle eastern",
+    "arabic": "middle eastern", "tex-mex": "tex-mex", "tex mex": "tex-mex", "filipino": "filipino",
+    "indonesian": "southeast asian", "malaysian": "southeast asian", "singaporean": "southeast asian",
+    "hawaiian": "hawaiian", "brazilian": "latin american", "argentinian": "latin american",
+    "argentine": "latin american", "peruvian": "latin american", "cuban": "latin american",
+    "latin american": "latin american", "latin": "latin american", "russian": "eastern european",
+    "ukrainian": "eastern european", "polish": "eastern european", "hungarian": "eastern european",
+    "eastern european": "eastern european", "ethiopian": "african", "african": "african",
+    "jamaican": "caribbean", "asian": "asian", "european": "european",
+}
+# Longest aliases first so "tex-mex" beats "mexican" and "latin american" beats "american".
+_CUISINE_ALIAS_RE = re.compile(
+    r"\b(" + "|".join(re.escape(a) for a in sorted(CUISINE_ALIASES, key=len, reverse=True)) + r")\b")
+
+
+def known_cuisine(value) -> str | None:
+    """Map a site-supplied cuisine to a canonical name, or None if unrecognized."""
+    if not value:
+        return None
+    text = " ".join(str(x) for x in value) if isinstance(value, list) else str(value)
+    m = _CUISINE_ALIAS_RE.search(text.lower())
+    return CUISINE_ALIASES[m.group(1)] if m else None
+
+
+def infer_cuisine(head: str, ingredients: list[str]) -> str | None:
+    """Guess cuisine from name/keywords (strong) or ingredients (needs 2+ signals,
+    since one jar of feta doesn't make overnight oats Mediterranean)."""
+    hits = _keyword_hits(head, CUISINES)
+    if hits:
+        return max(hits, key=hits.get)
+    hits = _keyword_hits(" ".join(ingredients), CUISINES)
+    if hits and max(hits.values()) >= 2:
+        return max(hits, key=hits.get)
+    return None
+
+
+def normalize_cuisine(r: dict) -> str:
+    """Clean the cuisine on an already-processed recipe (for libraries scraped
+    before cuisines were validated)."""
+    return (known_cuisine(r.get("cuisine")) or infer_cuisine(r.get("name", ""), r.get("ingredients", []))
+            or "other")
+
+
 STYLES = {
     "comfort": ["casserole", "mac and cheese", "creamy", "cheesy", "baked", "pot pie", "meatloaf",
                 "mashed", "stew", "chili", "lasagna", "grilled cheese", "comfort"],
@@ -199,20 +251,7 @@ def categorize(name: str, description: str, category, cuisine, keywords, ingredi
     if meal is None:
         meal = "dinner"
 
-    cuisine_val = None
-    if cuisine:
-        c = as_text(cuisine).lower()
-        cuisine_val = next((k for k in CUISINES if k in c), c.split(",")[0].strip() or None)
-    if not cuisine_val:
-        # Name/keywords are strong evidence; ingredients alone need 2+ signals
-        # (one jar of feta doesn't make overnight oats Mediterranean).
-        hits = _keyword_hits(head, CUISINES)
-        if hits:
-            cuisine_val = max(hits, key=hits.get)
-        else:
-            hits = _keyword_hits(" ".join(ingredients), CUISINES)
-            if hits and max(hits.values()) >= 2:
-                cuisine_val = max(hits, key=hits.get)
+    cuisine_val = known_cuisine(cuisine) or infer_cuisine(head, ingredients)
     styles = sorted(_keyword_hits(body, STYLES))
     if total_minutes is not None and total_minutes <= 30:
         styles.append("quick")

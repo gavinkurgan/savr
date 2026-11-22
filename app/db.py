@@ -85,7 +85,8 @@ class RecipeDB:
         finally:
             c.close()
 
-    def upsert(self, r: dict) -> int:
+    @staticmethod
+    def _upsert_row(c, r: dict) -> int:
         tags = "," + ",".join(r.get("diet_tags", []) + r.get("styles", [])) + ","
         search = " ".join([r["name"], r.get("description", ""), " ".join(r.get("ingredients", [])),
                            r.get("cuisine") or "", r.get("meal_type") or ""]).lower()
@@ -93,19 +94,54 @@ class RecipeDB:
                r.get("difficulty"), r.get("total_minutes"), r.get("prep_minutes"), r.get("cook_minutes"),
                r.get("active_minutes"), r.get("meal_type"), r.get("cuisine"), tags, search,
                json.dumps(r))
+        c.execute(
+            """INSERT INTO recipes (url,name,source,rating,rating_count,difficulty,total_minutes,
+               prep_minutes,cook_minutes,active_minutes,meal_type,cuisine,tags,search_text,data)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+               ON CONFLICT(url) DO UPDATE SET name=excluded.name, source=excluded.source,
+               rating=excluded.rating, rating_count=excluded.rating_count,
+               difficulty=excluded.difficulty, total_minutes=excluded.total_minutes,
+               prep_minutes=excluded.prep_minutes, cook_minutes=excluded.cook_minutes,
+               active_minutes=excluded.active_minutes, meal_type=excluded.meal_type,
+               cuisine=excluded.cuisine, tags=excluded.tags, search_text=excluded.search_text,
+               data=excluded.data""", row)
+        return c.execute("SELECT id FROM recipes WHERE url=?", (r["url"],)).fetchone()["id"]
+
+    def upsert(self, r: dict) -> int:
         with _lock, self.conn() as c:
-            c.execute(
-                """INSERT INTO recipes (url,name,source,rating,rating_count,difficulty,total_minutes,
-                   prep_minutes,cook_minutes,active_minutes,meal_type,cuisine,tags,search_text,data)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-                   ON CONFLICT(url) DO UPDATE SET name=excluded.name, source=excluded.source,
-                   rating=excluded.rating, rating_count=excluded.rating_count,
-                   difficulty=excluded.difficulty, total_minutes=excluded.total_minutes,
-                   prep_minutes=excluded.prep_minutes, cook_minutes=excluded.cook_minutes,
-                   active_minutes=excluded.active_minutes, meal_type=excluded.meal_type,
-                   cuisine=excluded.cuisine, tags=excluded.tags, search_text=excluded.search_text,
-                   data=excluded.data""", row)
-            return c.execute("SELECT id FROM recipes WHERE url=?", (r["url"],)).fetchone()["id"]
+            return self._upsert_row(c, r)
+
+    def replace_library(self, recipes: list[dict], version: str, prune: bool = True,
+                        meta_key: str = "library_sha") -> bool:
+        """Load a whole library in ONE transaction. ``BEGIN IMMEDIATE`` takes the
+        write lock first, so when several app workers start at once, one loads the
+        library and the others see the new version and skip. Returns False if this
+        version was already loaded."""
+        with _lock:
+            c = sqlite3.connect(self.path, timeout=120, isolation_level=None)
+            c.row_factory = sqlite3.Row
+            try:
+                c.execute("BEGIN IMMEDIATE")
+                row = c.execute("SELECT value FROM meta WHERE key=?", (meta_key,)).fetchone()
+                if row and row["value"] == version:
+                    c.execute("ROLLBACK")
+                    return False
+                for r in recipes:
+                    self._upsert_row(c, r)
+                if prune:
+                    keep = {r["url"] for r in recipes}
+                    gone = [(u,) for (u,) in c.execute("SELECT url FROM recipes") if u not in keep]
+                    c.executemany("DELETE FROM recipes WHERE url=?", gone)
+                c.execute("INSERT INTO meta(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                          (meta_key, version))
+                c.execute("COMMIT")
+                return True
+            except BaseException:
+                if c.in_transaction:
+                    c.execute("ROLLBACK")
+                raise
+            finally:
+                c.close()
 
     # ------------------------------------------------------------ meta / library
     def get_meta(self, key: str):
@@ -158,9 +194,10 @@ class RecipeDB:
         d["id"] = row["id"]
         return d
 
-    def search(self, q: str = "", meal_type=None, cuisine=None, tags: list[str] | None = None,
+    @staticmethod
+    def _where(q: str = "", meal_type=None, cuisine=None, tags: list[str] | None = None,
                max_minutes=None, max_difficulty=None, max_active=None, min_rating=None,
-               exclude_ingredients: list[str] | None = None, sort="rating", limit=50, offset=0) -> list[dict]:
+               exclude_ingredients: list[str] | None = None) -> tuple[str, list]:
         where, args = [], []
         for word in (q or "").lower().split():
             where.append("search_text LIKE ?"); args.append(f"%{word}%")
@@ -180,6 +217,13 @@ class RecipeDB:
             where.append("rating >= ?"); args.append(float(min_rating))
         for ex in exclude_ingredients or []:
             where.append("search_text NOT LIKE ?"); args.append(f"%{ex.lower()}%")
+        return (" WHERE " + " AND ".join(where) if where else ""), args
+
+    def search(self, q: str = "", meal_type=None, cuisine=None, tags: list[str] | None = None,
+               max_minutes=None, max_difficulty=None, max_active=None, min_rating=None,
+               exclude_ingredients: list[str] | None = None, sort="rating", limit=50, offset=0) -> list[dict]:
+        where, args = self._where(q, meal_type, cuisine, tags, max_minutes, max_difficulty, max_active,
+                                  min_rating, exclude_ingredients)
         order = {
             "rating": "rating DESC, rating_count DESC",
             "time": "total_minutes ASC",
@@ -187,13 +231,16 @@ class RecipeDB:
             "newest": "id DESC",
             "name": "name ASC",
         }.get(sort, "rating DESC")
-        sql = "SELECT id, data FROM recipes"
-        if where:
-            sql += " WHERE " + " AND ".join(where)
-        sql += f" ORDER BY {order} LIMIT ? OFFSET ?"
+        sql = f"SELECT id, data FROM recipes{where} ORDER BY {order}, id LIMIT ? OFFSET ?"
         with self.conn() as c:
             rows = c.execute(sql, args + [int(limit), int(offset)]).fetchall()
         return [self._hydrate(r) for r in rows]
+
+    def search_count(self, sort=None, limit=None, offset=None, **filters) -> int:
+        """Total matches for the same filters as ``search`` (paging args ignored)."""
+        where, args = self._where(**filters)
+        with self.conn() as c:
+            return c.execute(f"SELECT COUNT(*) FROM recipes{where}", args).fetchone()[0]
 
     def facets(self) -> dict:
         with self.conn() as c:

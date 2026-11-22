@@ -29,8 +29,12 @@ ACTIONS: list[tuple[str, list[str]]] = [
                  "wash", "assemble", "roll", "shape", "form", "fill", "cover", "pat"]),
 ]
 HANDS_OFF_ACTIONS = {"Bake", "Rest"}
-HANDS_OFF_HINTS = re.compile(r"\b(simmer|slow cook|braise|bake|roast|marinate|chill|refrigerate|rise|proof|"
-                             r"let (?:it )?(?:sit|stand|rest)|pressure cook|cook on (?:low|high)|slow cooker|overnight)\b", re.I)
+HANDS_OFF_HINTS = re.compile(
+    r"\b(?:simmer(?:s|ing)?|slow[- ]cook\w*|brais(?:e|es|ing)|bak(?:e|es|ing)|roast(?:s|ing)?|"
+    r"marinat(?:e|es|ing)|chill(?:s|ing)?|refrigerat(?:e|es|ing)|ris(?:e|es|ing)|proof(?:s|ing)?|"
+    r"brin(?:e|es|ing)|soak(?:s|ing)?|freez(?:e|es|ing)|"
+    r"let(?:\s+\S+){0,4}?\s+(?:sit|stand|rest|cool|chill|rise|marinate|soak|set)|"
+    r"pressure cook\w*|cook on (?:low|high)|slow cooker|crock ?pot|overnight)\b", re.I)
 COOK_ACTIONS = {"Bake", "Cook", "Grill", "Preheat"}
 
 # Sentences matching these are blog chatter, not instructions.
@@ -158,6 +162,10 @@ def _flatten_instructions(instructions) -> list[tuple[str | None, str]]:
     return out
 
 
+def is_hands_off(action: str, text: str) -> bool:
+    return action in HANDS_OFF_ACTIONS or bool(HANDS_OFF_HINTS.search(text))
+
+
 def simplify_instructions(instructions) -> list[dict]:
     steps: list[dict] = []
     for section, chunk in _flatten_instructions(instructions):
@@ -169,7 +177,7 @@ def simplify_instructions(instructions) -> list[dict]:
                 continue
             action = classify_action(text)
             minutes = parse_text_minutes(text)
-            hands_off = action in HANDS_OFF_ACTIONS or bool(HANDS_OFF_HINTS.search(text))
+            hands_off = is_hands_off(action, text)
             # Merge tiny consecutive fragments of the same action ("Stir. Add salt.")
             if steps and steps[-1]["action"] == action and len(steps[-1]["text"]) + len(text) < 110 \
                     and steps[-1]["section"] == section and not minutes and not steps[-1]["minutes"]:

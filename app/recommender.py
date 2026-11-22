@@ -9,6 +9,7 @@ from __future__ import annotations
 import math
 import re
 
+from .quality import quality_score
 from .tagger import CUISINES, MEAL_TYPES, STYLES
 
 EFFORT_WORDS = {
@@ -214,8 +215,7 @@ def score_recipe(r: dict, prefs: dict, profile: dict | None = None, pantry_items
     # rating, with a pull toward 4.0 for recipes with few reviews (Bayesian average)
     rating = r.get("rating") or 4.0
     n = r.get("rating_count") or 0
-    bayes = (rating * n + 4.0 * 20) / (n + 20)
-    score += (bayes - 4.0) * 4
+    score += (quality_score(r.get("rating"), n) - 4.0) * 4
     if rating >= 4.7 and n >= 50:
         why.append(f"★ {rating} from {n:,} ratings")
 

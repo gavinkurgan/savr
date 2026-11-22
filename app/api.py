@@ -9,7 +9,7 @@ import datetime as dt
 
 from flask import Blueprint, Response, current_app, g, jsonify, request
 
-from . import current_household, grocery, kroger
+from . import current_household, grocery, kroger, walmart
 from .households import normalize_code
 from .pantry import suggest as pantry_suggest
 from .planner import plan_week, shared_ingredients
@@ -374,3 +374,27 @@ def kroger_disconnect():
     hh = need_household()
     hh_store().kroger_disconnect(hh["id"])
     return jsonify(ok=True)
+
+
+# ---------------------------------------------------------------- walmart
+@bp.get("/walmart/status")
+def walmart_status():
+    """Whether the Walmart API works right now (a cached live test search)."""
+    return jsonify(walmart.status(force=request.args.get("refresh") == "1"))
+
+
+@bp.post("/walmart/cart")
+def walmart_cart():
+    """Match the list to Walmart items and return one add-to-cart link.
+    Falls back to per-item walmart.com search links when the API isn't usable."""
+    body = request.get_json(silent=True) or {}
+    items, _ = _items_from_body(body)
+    if items is None:
+        return jsonify(error="no valid recipes selected"), 400
+    st = walmart.status()
+    if st["available"]:
+        try:
+            return jsonify(mode="api", **walmart.build_cart(items))
+        except walmart.WalmartError as e:
+            st = {"available": False, "reason": str(e)}
+    return jsonify(mode="links", reason=st.get("reason"), links=grocery.store_links(items, "walmart"))

@@ -13,12 +13,28 @@ function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;
 async function api(path, opts = {}) {
   const init = { method: opts.method || (opts.body ? 'POST' : 'GET'), headers: { 'Content-Type': 'application/json' } };
   if (opts.body) init.body = JSON.stringify(opts.body);
-  const r = await fetch(path, init);
+  let r;
+  try { r = await fetch(path, init); }
+  catch { Offline.show(); throw new Error("Can't reach the savr server. Is it running?"); }
   const ct = r.headers.get('content-type') || '';
   const data = ct.includes('json') ? await r.json() : await r.text();
   if (!r.ok) throw new Error((data && data.error) || r.statusText);
   return data;
 }
+/* Pages can come from the offline cache; say so instead of showing stale data silently. */
+const Offline = {
+  show() {
+    if (document.getElementById('offline-bar')) return;
+    const b = document.createElement('div');
+    b.id = 'offline-bar'; b.setAttribute('role', 'status');
+    b.textContent = "Offline: can't reach the savr server, showing a saved copy.";
+    document.body.prepend(b);
+  },
+  async check() {
+    try { const r = await fetch('/healthz', { cache: 'no-store' }); if (r.ok) return; } catch {}
+    Offline.show();
+  },
+};
 const member = () => store.get('savr_member', '') || 'me';
 
 /* ---------- voice: standard vs unhinged ---------- */
@@ -98,6 +114,7 @@ const Cart = {
       document.getElementById('list-out').hidden = false;
       document.getElementById('export-out').innerHTML = '';
       if (Cart.kroger) Kroger.render();
+      Walmart.render();
     } catch (e) { toast(e.message); }
   },
   download(text, filename, type) {
@@ -175,6 +192,44 @@ const Kroger = {
         e.target.textContent = 'Added ✓';
       } catch (err) { toast(err.message); e.target.disabled = false; e.target.textContent = 'Try again'; }
     };
+  },
+};
+
+/* ---------- Walmart (API match + one cart link; search links when the API isn't usable) ---------- */
+const Walmart = {
+  links(list) {
+    return `<ul>${list.map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.item)}</a></li>`).join('')}</ul>`;
+  },
+  async render() {
+    const btn = document.getElementById('wpush');
+    if (!btn) return;
+    document.getElementById('wresult').innerHTML = '';
+    btn.disabled = false; btn.onclick = Walmart.push;
+    try {
+      const s = await api('/api/walmart/status');
+      btn.textContent = s.available ? 'Add everything to a Walmart cart' : 'Walmart search links';
+      document.getElementById('walmart-note').textContent = s.available
+        ? 'savr matches each item to a Walmart product and opens Walmart with everything in your cart.'
+        : 'Opens a walmart.com search for each item.';
+    } catch {}
+  },
+  async push(e) {
+    const btn = e.currentTarget, out = document.getElementById('wresult');
+    const label = btn.textContent; btn.disabled = true; btn.textContent = 'Matching products…';
+    try {
+      const d = await api('/api/walmart/cart', { body: Cart.body('json') });
+      if (d.mode === 'api' && d.cart_url) {
+        out.innerHTML = `<p><a class="btn primary" href="${esc(d.cart_url)}" target="_blank" rel="noopener">Open Walmart cart (${d.added.length} items)</a>
+          ${d.estimated_total ? ` about $${d.estimated_total.toFixed(2)}` : ''}</p>
+          <p class="fine">Choose pickup or delivery and check out on Walmart.</p>
+          <ul class="fine">${d.added.map(a => `<li>${esc(a.item)} → ${esc(a.product)} ×${a.quantity}</li>`).join('')}</ul>
+          ${d.unmatched.length ? `<p class="fine">Couldn't match these. Search for them:</p>${Walmart.links(d.unmatched)}` : ''}`;
+      } else {
+        const list = d.links || d.unmatched || [];
+        out.innerHTML = `${d.reason ? `<p class="fine">Walmart API not available: ${esc(d.reason)} Showing search links instead.</p>` : ''}${Walmart.links(list)}`;
+      }
+    } catch (err) { toast(err.message); }
+    btn.disabled = false; btn.textContent = label;
   },
 };
 
@@ -375,3 +430,5 @@ document.addEventListener('click', (e) => {
 Voice.paint();
 Cart.badge();
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+Offline.check();
+window.addEventListener('online', () => document.getElementById('offline-bar')?.remove());

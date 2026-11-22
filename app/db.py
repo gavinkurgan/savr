@@ -6,6 +6,8 @@ import sqlite3
 import threading
 from contextlib import contextmanager
 
+from .quality import sql_quality_expr
+
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS recipes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -225,7 +227,7 @@ class RecipeDB:
         where, args = self._where(q, meal_type, cuisine, tags, max_minutes, max_difficulty, max_active,
                                   min_rating, exclude_ingredients)
         order = {
-            "rating": "rating DESC, rating_count DESC",
+            "rating": f"{sql_quality_expr()} DESC, rating_count DESC",  # review-weighted
             "time": "total_minutes ASC",
             "difficulty": "difficulty ASC, total_minutes ASC",
             "newest": "id DESC",

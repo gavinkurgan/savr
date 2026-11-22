@@ -16,7 +16,7 @@ savr is a Python (Flask) web app. Users browse a curated library of well-reviewe
 | **Pantry** | Track what you have, with optional use-by dates. Shopping lists skip what you already have, "What you can make" puts expiring items first, and "Mark as bought" fills the pantry after a shopping trip. |
 | **Household ratings** | Thumbs up/down per person, shared across a household. Thumbs-down recipes are never suggested again. Liked recipes, cuisines and proteins move similar recipes up in picks and plans. |
 | **Cook mode** | Full screen, one big step at a time. Swipe or use the arrow keys, the screen stays on, steps can be read aloud (in either style), voice commands work ("next", "back", "repeat", "timer") where the browser supports them, and there's an ingredient drawer. |
-| **Pickup orders** | One combined, scaled list grouped by aisle. **Kroger sign-in** matches products at your chosen store and fills the pickup cart (also Kroger-owned stores such as King Soopers, Ralphs, Fred Meyer and Smith's). Other options: Instacart shopping-list link, Walmart/Target search links, CSV, checklist, share sheet. |
+| **Pickup orders** | One combined, scaled list grouped by aisle. **Kroger sign-in** matches products at your chosen store and fills the pickup cart (also Kroger-owned stores such as King Soopers, Ralphs, Fred Meyer and Smith's). **Walmart** (when its API is set up) matches each item to a Walmart product and opens one add-to-cart link for pickup or delivery; otherwise it gives Walmart search links. Other options: Instacart shopping-list link, Target search links, CSV, checklist, share sheet. |
 
 **Households** use a shared code (e.g. `basil-otter-4821`) instead of accounts. A phone joins by entering the code, and the household's ratings, pantry and plan are stored on the server. Treat the code like a Wi-Fi password.
 
@@ -28,6 +28,8 @@ savr is a Python (Flask) web app. Users browse a curated library of well-reviewe
 cp .env.example .env              # set SECRET_KEY at minimum
 docker compose up -d --build      # → http://localhost:8000  (HOST_PORT=8080 to change)
 ```
+If you run the image yourself instead (e.g. Docker Desktop's ▶ Run), publish the port, e.g. `docker run -p 8000:8000 -e SECRET_KEY=… -v savr_savr-data:/data savr:latest`. Without `-p` the container runs but your browser can't reach it, and the installed app shows its offline copy (with a red "Offline" bar).
+
 The recipe library ships inside the image. Household data is stored in SQLite on the `savr-data` volume and survives library updates.
 
 Locally, without Docker:
@@ -45,6 +47,7 @@ pytest -q
 Settings live in `.env` (git- and docker-ignored). Docker Compose reads it, and so does `python wsgi.py`; real environment variables override it.
 | `COOKIE_SECURE=1` | When you serve over HTTPS. |
 | `KROGER_CLIENT_ID`, `KROGER_CLIENT_SECRET`, `KROGER_REDIRECT_URI` | Kroger pickup cart. Create an app at developer.kroger.com with scopes `product.compact` and `cart.basic:write`. The redirect URI must be `https://<your host>/kroger/callback`. Kroger buttons stay hidden until these are set. |
+| `WALMART_CONSUMER_ID`, `WALMART_KEY_VERSION`, `WALMART_PRIVATE_KEY` (or `WALMART_PRIVATE_KEY_PATH`), `WALMART_PUBLISHER_ID` | Walmart cart link (Walmart I/O). Upload your **public** key at walmart.io, then set the consumer ID and key version it shows. Give savr the **private** key: for Docker, put it in `.env` on one line with `WALMART_PRIVATE_KEY=$(base64 -i WM_IO_private_key.pem | tr -d '\n')`; without Docker, `WALMART_PRIVATE_KEY_PATH=/path/to/WM_IO_private_key.pem` also works. Use the unencrypted key (`BEGIN PRIVATE KEY`) or also set `WALMART_PRIVATE_KEY_PASSWORD`. The publisher ID is optional (affiliate credit). The app runs a test search (rechecked every 15 minutes, or 2 minutes after a failure) and uses Walmart search links when the API isn't working. Key files are git-ignored; keep them out of the repo anyway. |
 | `INSTACART_API_KEY`, `INSTACART_ENV` | Instacart shopping-list links (apply for the Instacart Developer Platform). Without a key, the app shows the request body instead. |
 | `ANTHROPIC_API_KEY`, `SAVR_REWRITE_MODEL` | **Developer CLI only.** Claude rewrite of steps and voices. Default model `claude-haiku-5-5`. |
 | `MIN_RATING` / `MIN_REVIEWS` | Defaults for the scraper (4.0 / 5). |
@@ -64,6 +67,7 @@ python -m app.cli refresh          # re-check ratings; drop recipes that fell be
 python -m app.cli rewrite --llm    # Claude: tighter steps + equipment + both voices
 python -m app.cli remove "Recipe Name"
 python -m app.cli samples          # rebuild the 40 bundled original recipes
+python -m app.cli prune --min-score 4.2 --dedupe --dry-run   # raise the bar / drop duplicate dishes, no re-scrape
 python -m app.cli stats
 ```
 
@@ -73,13 +77,19 @@ python -m app.cli stats
 
 ```bash
 python -m app.cli scrape-sites --list                                     # what would run
-python -m app.cli scrape-sites                                            # 10 recipes / 40 pages per site
+python -m app.cli scrape-sites                                            # 10 recipes / 100 pages per site
 python -m app.cli scrape-sites --per-site 25 --max-pages-per-site 80 --max-total 300
 python -m app.cli scrape-sites --only allrecipes.com,seriouseats.com      # or --skip food.com
 python -m app.cli scrape-sites my_sites.txt --min-rating 4.5
+python -m app.cli scrape-sites --min-score 4.2                            # review-weighted bar (see below)
+python -m app.cli scrape-sites --allow-unrated-from kingarthurbaking.com  # sites that publish no ratings
 ```
 
-File format: one start URL per line (homepage, listing page, sitemap `.xml`, or a recipe). A bare domain like `allrecipes.com` means its homepage, and `#` starts a comment. Lines for the same site share that site's budget. The run prints each result as it goes, saves the library every 10 recipes, and ends with a per-site summary (saved / low_rating / no_recipe / blocked / error). Sites without reader ratings in their recipe data save nothing at the default rating bar.
+File format: one start URL per line (homepage, listing page, sitemap `.xml`, or a recipe). A bare domain like `allrecipes.com` means its homepage, and `#` starts a comment. Lines for the same site share that site's budget. The run prints each result as it goes, saves the library every 10 recipes, and ends with a per-site summary: added / updated / replaced / duplicate, `known` (already in the library, skipped without fetching), `low_rating`, `unrated` (the site publishes no rating; allow it per site with `--allow-unrated-from`), `incomplete` (fewer than `--min-ingredients` ingredients, no instructions, or no image unless `--allow-no-image`), `no_recipe`, `blocked` (robots.txt), `error_<HTTP code>`, and `gave_up` when a site refused 6 requests in a row.
+
+**Getting more recipes per run.** Pages are fetched in priority order: start URLs, recipe sitemaps, single-recipe pages, other pages, then listing pages, so a site's budget goes to recipes rather than category pages. Sitemaps listed in the site's robots.txt are used automatically (`--no-sitemaps` turns that off) and tag/category/author sitemaps are skipped. Recipes already in the library are skipped and don't use the page budget (`--refresh-known` re-fetches them; `refresh` re-checks ratings). On a 429 or 503 the scraper waits (honouring Retry-After), retries twice and slows down for that site.
+
+**Quality.** Besides `--min-rating` and `--min-reviews`, `--min-score` sets a bar on the review-weighted score, which pulls a rating toward 4.0 until it has about 20 reviews (4.9 from 6 reviews scores 4.21; 4.6 from 19,000 scores 4.60). "Top rated" and the picks use the same score. When a scraped dish matches one already in the library (same name ignoring words like "best", "easy", "recipe"), only the higher-scoring one is kept. `prune` applies a new bar or de-duplicates the existing library without re-scraping; the bundled samples are never pruned.
 
 To refresh on a schedule, put your sources in `sources.txt` (see `sources.txt.example`) and run `scripts/update-library.sh` from cron, e.g. weekly. Then commit `library.json` and redeploy.
 

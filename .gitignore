@@ -221,3 +221,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Private keys and API credentials (never commit these)
+WM_IO_*
+*.pem
+*.key
+*.p12
+*_rsa_key_pair
+secrets/

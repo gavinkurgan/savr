@@ -30,6 +30,21 @@ class Library:
     def by_url(self) -> dict[str, dict]:
         return {r["url"]: r for r in self.recipes}
 
+    def urls(self) -> set[str]:
+        return {r["url"] for r in self.recipes}
+
+    def find_duplicate(self, recipe: dict) -> dict | None:
+        """Another scraped recipe for the same dish (same normalized name), if any.
+        The bundled samples are never treated as duplicates."""
+        from .quality import dish_key
+        key = dish_key(recipe.get("name", ""))
+        if not key or is_sample(recipe):
+            return None
+        for r in self.recipes:
+            if r["url"] != recipe["url"] and not is_sample(r) and dish_key(r.get("name", "")) == key:
+                return r
+        return None
+
     def upsert(self, recipe: dict) -> str:
         recipe = {k: v for k, v in recipe.items() if k != "id"}
         for i, r in enumerate(self.recipes):
@@ -57,6 +72,10 @@ class Library:
         with open(tmp, "w", encoding="utf-8") as f:
             json.dump(payload, f, ensure_ascii=False, indent=1)
         os.replace(tmp, self.path)
+
+
+def is_sample(recipe: dict) -> bool:
+    return "sample.local" in recipe.get("url", "")
 
 
 def file_sha(path: str) -> str | None:

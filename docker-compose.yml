@@ -13,6 +13,10 @@ services:
       KROGER_CLIENT_ID: "${KROGER_CLIENT_ID:-}"
       KROGER_CLIENT_SECRET: "${KROGER_CLIENT_SECRET:-}"
       KROGER_REDIRECT_URI: "${KROGER_REDIRECT_URI:-}"       # https://your-host/kroger/callback
+      WALMART_CONSUMER_ID: "${WALMART_CONSUMER_ID:-}"       # Walmart I/O consumer ID
+      WALMART_KEY_VERSION: "${WALMART_KEY_VERSION:-1}"
+      WALMART_PRIVATE_KEY: "${WALMART_PRIVATE_KEY:-}"       # private key, base64 of the PEM on one line
+      WALMART_PUBLISHER_ID: "${WALMART_PUBLISHER_ID:-}"     # optional affiliate ID
       # Developer CLI only (scrape / rewrite); the web app never calls these
       ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
       MIN_RATING: "${MIN_RATING:-4.0}"

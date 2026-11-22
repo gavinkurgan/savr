@@ -1,0 +1,13 @@
+.git
+.env
+.envrc
+WM_IO_*
+*.pem
+*.key
+*.p12
+*_rsa_key_pair
+secrets/
+data/
+tests/
+**/__pycache__
+.DS_Store

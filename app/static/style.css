@@ -143,6 +143,8 @@ a.btn.primary { color: #fff; }
 #toast { position: fixed; left: 50%; bottom: calc(86px + var(--safe-b)); transform: translateX(-50%) translateY(20px); background: var(--ink); color: var(--bg);
   padding: 8px 16px; border-radius: 99px; opacity: 0; transition: .2s; pointer-events: none; font-size: .9rem; z-index: 10; }
 #toast.show { opacity: 1; transform: translateX(-50%); }
+#offline-bar { position: sticky; top: 0; z-index: 20; background: #b3261e; color: #fff; text-align: center;
+  padding: calc(6px + env(safe-area-inset-top, 0px)) 12px 6px; font-size: .9rem; }
 code { background: var(--line); padding: 1px 5px; border-radius: 4px; font-size: .85em; }
 
 /* ---------- savr additions ---------- */

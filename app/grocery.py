@@ -10,7 +10,8 @@ upload into a pickup cart. The workable routes are:
   the exact JSON payload.
 * Kroger Public API — sign in once, savr matches UPCs at your store and adds
   everything to the pickup cart (see kroger.py). Search links as a fallback.
-* Walmart / Target / others — per-item search links + CSV / text checklist.
+* Walmart I/O — match items, one add-to-cart link (see walmart.py); search links as a fallback.
+* Target / others — per-item search links + CSV / text checklist.
 """
 from __future__ import annotations
 

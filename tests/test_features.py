@@ -334,3 +334,83 @@ def test_kroger_network_failure_is_a_clean_error(client, kroger_env, monkeypatch
     monkeypatch.setattr(kroger.requests, "post", boom)
     resp = client.get("/api/kroger/locations?zip=80202")
     assert resp.status_code == 502 and "Couldn't reach Kroger" in resp.get_json()["error"]
+
+
+# ---------------------------------------------------------------- multi-site scrape
+def _multi_site():
+    from conftest import fixture as fx
+    pages = {
+        "https://www.alpha.com/": '<a href="/recipes/lemon-pasta/">a</a><a href="/recipes/soggy-casserole/">b</a>',
+        "https://www.alpha.com/recipes/lemon-pasta/": fx("blog_recipe.html"),
+        "https://www.alpha.com/recipes/soggy-casserole/": fx("low_rated.html"),
+        # blog-style slugs with no "recipe" in the path, found through a sitemap index
+        "https://beta.net/sitemap_index.xml": '<sitemapindex><sitemap><loc>https://beta.net/post-sitemap.xml</loc></sitemap></sitemapindex>',
+        "https://beta.net/post-sitemap.xml": '<urlset><url><loc>https://beta.net/one-pot-lemon-pasta/</loc></url></urlset>',
+        "https://beta.net/one-pot-lemon-pasta/": fx("blog_recipe.html").replace("Lemon Parmesan Pasta", "Beta Lemon Pasta"),
+    }
+    order = []
+
+    def fetch(url):
+        order.append(url)
+        if url not in pages:
+            raise IOError("404")
+        return pages[url]
+    return fetch, order
+
+
+def test_read_sources_handles_comments_and_bare_domains(tmp_path):
+    from app.scraper import group_by_site, read_sources
+    f = tmp_path / "sites.txt"
+    f.write_text("# header\n\nallrecipes.com\nhttps://www.allrecipes.com/recipes/  # dinner\n"
+                 "  # indented comment\nhttps://seriouseats.com/x#frag\n")
+    urls = read_sources(str(f))
+    assert urls == ["https://allrecipes.com/", "https://www.allrecipes.com/recipes/", "https://seriouseats.com/x#frag"]
+    assert list(group_by_site(urls)) == ["allrecipes.com", "seriouseats.com"]
+
+
+def test_crawl_sites_budgets_per_site_and_interleaves():
+    from app.scraper import crawl_sites
+    fetch, order = _multi_site()
+    res = crawl_sites(["https://www.alpha.com/", "https://beta.net/sitemap_index.xml"], fetch,
+                      per_site=5, min_rating=4.0)
+    assert {r.url: r.status for r in res["alpha.com"]}["https://www.alpha.com/recipes/lemon-pasta/"] == "saved"
+    beta = {r.url: r.status for r in res["beta.net"]}
+    assert beta["https://beta.net/one-pot-lemon-pasta/"] == "saved"  # found via nested sitemap
+    assert order[:2] == ["https://www.alpha.com/", "https://beta.net/sitemap_index.xml"]  # sites take turns
+    # a per-site cap of 1 stops alpha after its first saved recipe
+    fetch, order = _multi_site()
+    res = crawl_sites(["https://www.alpha.com/"], fetch, per_site=1, min_rating=0)
+    assert sum(r.status == "saved" for r in res["alpha.com"]) == 1
+
+
+def test_crawl_sites_max_total():
+    from app.scraper import crawl_sites
+    fetch, _ = _multi_site()
+    res = crawl_sites(["https://www.alpha.com/", "https://beta.net/sitemap_index.xml"], fetch,
+                      per_site=5, max_total=1, min_rating=4.0)
+    assert sum(r.status == "saved" for rs in res.values() for r in rs) == 1
+
+
+def test_cli_scrape_sites(tmp_path, capsys):
+    lib_path = str(tmp_path / "library.json")
+    sites = tmp_path / "sites.txt"
+    sites.write_text("https://www.alpha.com/\nhttps://beta.net/sitemap_index.xml\n")
+    fetch, _ = _multi_site()
+    argv = ["--library", lib_path, "scrape-sites", str(sites)]
+    assert cli.cmd_scrape_sites(cli.build_parser().parse_args(argv), fetch=fetch) == 0
+    names = sorted(r["name"] for r in Library(lib_path).recipes)
+    assert names == ["The BEST Beta Lemon Pasta", "The BEST Lemon Parmesan Pasta"]
+    out = capsys.readouterr().out
+    assert "alpha.com" in out and "beta.net" in out
+    # --only filters sites; --list doesn't scrape
+    assert cli.main(argv + ["--only", "beta.net", "--list"]) == 0
+    out = capsys.readouterr().out
+    assert "beta.net" in out and "alpha.com" not in out
+
+
+def test_default_sites_file_is_valid():
+    from app.scraper import group_by_site, read_sources
+    sites = group_by_site(read_sources(cli.DEFAULT_SITES_FILE))
+    assert len(sites) >= 30
+    for s in ("allrecipes.com", "simplyrecipes.com", "seriouseats.com"):
+        assert s in sites

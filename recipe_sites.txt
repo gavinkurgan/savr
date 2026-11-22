@@ -1,0 +1,68 @@
+# savr default site list for multi-site scraping.
+#
+#   python -m app.cli scrape-sites                          # every site below
+#   python -m app.cli scrape-sites --list                   # show what would run
+#   python -m app.cli scrape-sites --only allrecipes.com,seriouseats.com --per-site 20
+#   python -m app.cli scrape-sites my_sites.txt             # your own list
+#
+# Format: one start URL per line. A start URL can be a homepage, a category or
+# listing page, a sitemap (.xml), or a single recipe. A bare domain
+# ("allrecipes.com") means its homepage. "#" starts a comment. Lines for the same
+# site share that site's budget (--per-site recipes, --max-pages-per-site pages).
+#
+# Only recipes that publish schema.org ratings at or above --min-rating (default 4.0)
+# with at least --min-reviews (default 5) are kept, so sites without reader ratings
+# add little. The scraper obeys robots.txt (sites that block it show as "blocked")
+# and waits between requests to each site. Check each site's terms before scraping,
+# and comment out any site you don't want.
+
+# ---- Large recipe sites --------------------------------------------------------
+https://www.allrecipes.com/recipes/17562/dinner/
+https://www.allrecipes.com/recipes/
+https://www.simplyrecipes.com/
+https://www.seriouseats.com/
+https://www.foodnetwork.com/recipes
+https://www.epicurious.com/recipes-menus
+https://www.bonappetit.com/recipes
+https://www.food.com/
+https://www.tasteofhome.com/recipes/
+https://www.delish.com/cooking/recipe-ideas/
+https://www.eatingwell.com/
+https://www.thekitchn.com/
+https://www.bbcgoodfood.com/recipes
+https://www.bettycrocker.com/recipes
+https://www.kingarthurbaking.com/recipes
+https://food52.com/recipes
+https://tasty.co/
+https://www.thepioneerwoman.com/food-cooking/recipes/
+https://www.jamieoliver.com/recipes/
+
+# ---- Popular recipe blogs ------------------------------------------------------
+https://www.budgetbytes.com/
+https://www.recipetineats.com/
+https://sallysbakingaddiction.com/
+https://smittenkitchen.com/
+https://www.onceuponachef.com/
+https://cookieandkate.com/
+https://pinchofyum.com/
+https://www.loveandlemons.com/
+https://minimalistbaker.com/
+https://natashaskitchen.com/
+https://www.skinnytaste.com/
+https://www.spendwithpennies.com/
+https://thewoksoflife.com/
+https://www.justonecookbook.com/
+https://www.halfbakedharvest.com/
+https://damndelicious.net/
+https://www.gimmesomeoven.com/
+https://www.inspiredtaste.net/
+https://www.twopeasandtheirpod.com/
+https://cafedelites.com/
+https://www.wellplated.com/
+https://www.cookingclassy.com/
+https://tastesbetterfromscratch.com/
+https://thestayathomechef.com/
+https://rasamalaysia.com/
+https://www.dinneratthezoo.com/
+https://www.averiecooks.com/
+https://feelgoodfoodie.net/

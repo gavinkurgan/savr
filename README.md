@@ -34,7 +34,7 @@ Locally, without Docker:
 ```bash
 pip install -r requirements-dev.txt
 python wsgi.py                    # :8000 — reads .env automatically
-pytest -q                         # 76 tests
+pytest -q
 ```
 
 ### Configuration
@@ -59,12 +59,27 @@ Users never scrape. The library is a flat file, `app/data/library.json`, which y
 ```bash
 python -m app.cli scrape https://site.com/recipes/weeknight/ --max 25   # recipe pages, listing pages, sitemaps
 python -m app.cli scrape --from-file sources.txt --min-rating 4.5
+python -m app.cli scrape-sites     # many sites at once from recipe_sites.txt (see below)
 python -m app.cli refresh          # re-check ratings; drop recipes that fell below the bar
 python -m app.cli rewrite --llm    # Claude: tighter steps + equipment + both voices
 python -m app.cli remove "Recipe Name"
 python -m app.cli samples          # rebuild the 40 bundled original recipes
 python -m app.cli stats
 ```
+
+### Scraping many sites at once
+
+`recipe_sites.txt` (repo root) lists 46 popular recipe sites: Allrecipes, Simply Recipes, Serious Eats, Food Network, Epicurious, Bon Appétit, Taste of Home, BBC Good Food, King Arthur, Budget Bytes, RecipeTin Eats, Sally's Baking Addiction and more. `scrape-sites` reads it (or any file you pass) and gives each site its own budget, so one big site can't use up the whole run. It takes turns between sites one page at a time, which spreads requests out so the per-site delay rarely slows the run.
+
+```bash
+python -m app.cli scrape-sites --list                                     # what would run
+python -m app.cli scrape-sites                                            # 10 recipes / 40 pages per site
+python -m app.cli scrape-sites --per-site 25 --max-pages-per-site 80 --max-total 300
+python -m app.cli scrape-sites --only allrecipes.com,seriouseats.com      # or --skip food.com
+python -m app.cli scrape-sites my_sites.txt --min-rating 4.5
+```
+
+File format: one start URL per line (homepage, listing page, sitemap `.xml`, or a recipe). A bare domain like `allrecipes.com` means its homepage, and `#` starts a comment. Lines for the same site share that site's budget. The run prints each result as it goes, saves the library every 10 recipes, and ends with a per-site summary (saved / low_rating / no_recipe / blocked / error). Sites without reader ratings in their recipe data save nothing at the default rating bar.
 
 To refresh on a schedule, put your sources in `sources.txt` (see `sources.txt.example`) and run `scripts/update-library.sh` from cron, e.g. weekly. Then commit `library.json` and redeploy.
 

@@ -7,8 +7,8 @@ from urllib.parse import urlparse
 from .durations import parse_iso_duration
 from .ingredients import parse_ingredient
 from .scraper import _image_url, parse_rating
-from .simplifier import clean_text, estimate_times, rate_difficulty, simplify_instructions
-from .tagger import categorize, diet_tags
+from .simplifier import clean_text, estimate_times, is_hands_off, rate_difficulty, simplify_instructions
+from .tagger import categorize, diet_tags, normalize_cuisine
 
 
 def _as_list(v) -> list:
@@ -75,3 +75,20 @@ def process_recipe(raw: dict, url: str) -> dict:
         "diet_tags": tags,
         "allergens": {k: v for k, v in allergens.items()},
     }
+
+
+def reprocess_recipe(r: dict) -> dict:
+    """Re-apply the offline cleanups to an already-processed library recipe, without
+    re-scraping: cuisine validation, hands-off detection, hands-on minutes and
+    difficulty. Site-provided prep/cook/total times are kept as they are."""
+    for key in ("steps", "steps_rules"):
+        for s in r.get(key) or []:
+            s["hands_off"] = is_hands_off(s.get("action", ""), s.get("text", ""))
+    base = r.get("steps_rules") or r.get("steps") or []
+    total, prep = r.get("total_minutes") or 0, r.get("prep_minutes") or 0
+    hands_off = min(sum(s.get("minutes") or 0 for s in base if s["hands_off"]), total)
+    r["hands_off_minutes"] = int(hands_off)
+    r["active_minutes"] = int(max(total - hands_off, prep))
+    r.update(rate_difficulty(base, r.get("ingredients", []), r))
+    r["cuisine"] = normalize_cuisine(r)
+    return r

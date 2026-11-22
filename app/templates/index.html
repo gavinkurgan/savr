@@ -51,10 +51,17 @@
   </details>
 </form>
 
-<p class="count">{{ results|length }} recipe{{ 's' if results|length != 1 }}</p>
+<p class="count">{% if pages > 1 %}{{ first }}–{{ first + results|length - 1 }} of {% endif %}{{ total }} recipe{{ 's' if total != 1 }}</p>
 <section class="cards">
   {% for r in results %}{{ card(r, rating=ratings.get(r.id)) }}{% else %}
   <p class="empty">Nothing matches yet. Loosen a filter or try <a href="/recommend">Pick for me</a>.</p>
   {% endfor %}
 </section>
+{% if pages > 1 %}
+<nav class="pager" aria-label="Pages">
+  {% if page > 1 %}<a class="btn" href="{{ page_url(page - 1) }}" rel="prev">← Previous</a>{% else %}<span></span>{% endif %}
+  <span class="pager-pos">Page {{ page }} of {{ pages }}</span>
+  {% if page < pages %}<a class="btn" href="{{ page_url(page + 1) }}" rel="next">Next →</a>{% else %}<span></span>{% endif %}
+</nav>
+{% endif %}
 {% endblock %}

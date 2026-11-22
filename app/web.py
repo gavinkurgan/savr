@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import secrets
+from urllib.parse import urlencode
 
 from flask import (Blueprint, abort, current_app, g, redirect, render_template, request,
                    send_from_directory, session, url_for)
@@ -15,7 +16,8 @@ from .tagger import DIET_LABELS
 bp = Blueprint("web", __name__)
 
 DIET_FILTERS = ["gluten_free", "dairy_free", "egg_free", "nut_free", "vegetarian", "vegan", "shellfish_free"]
-MEALS = ["breakfast", "lunch", "dinner", "soup", "salad", "side", "appetizer", "dessert"]
+MEALS = ["breakfast", "lunch", "dinner", "soup", "salad", "side", "appetizer", "dessert", "drink"]
+PAGE_SIZE = 60
 
 
 def db():
@@ -34,10 +36,21 @@ def _ratings():
 @bp.get("/")
 def index():
     args = search_args(request.args)
+    page = max(request.args.get("page", 1, type=int) or 1, 1)
+    args.update(limit=PAGE_SIZE, offset=(page - 1) * PAGE_SIZE)
     results = db().search(**args)
+    total = db().search_count(**args)
+    pages = max((total + PAGE_SIZE - 1) // PAGE_SIZE, 1)
+
+    def page_url(n):
+        qs = [(k, v) for k, v in request.args.items(multi=True) if k != "page"]
+        if n > 1:
+            qs.append(("page", str(n)))
+        return "/?" + urlencode(qs) if qs else "/"
     return render_template("index.html", results=results, facets=db().facets(), args=request.args,
                            diet_filters=DIET_FILTERS, meals=MEALS, selected_diets=args["tags"] or [],
-                           ratings=_ratings())
+                           ratings=_ratings(), total=total, page=page, pages=pages,
+                           first=args["offset"] + 1, page_url=page_url)
 
 
 def _recipe_or_404(rid):

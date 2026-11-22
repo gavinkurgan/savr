@@ -1,6 +1,6 @@
 // Offline support: app shell is cached; recipe pages are network-first with cache fallback,
 // so anything you've opened works in the kitchen with no signal.
-const CACHE = 'savr-v2';
+const CACHE = 'savr-v3';
 const SHELL = ['/', '/cart', '/recommend', '/plan', '/pantry', '/static/style.css', '/static/app.js', '/static/icon.svg'];
 
 self.addEventListener('install', (e) => {

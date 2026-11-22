@@ -2,6 +2,8 @@
 
     python -m app.cli scrape https://site.com/recipes/dinner/ --max 25
     python -m app.cli scrape --from-file sources.txt
+    python -m app.cli scrape-sites            # many sites from recipe_sites.txt
+    python -m app.cli scrape-sites my_sites.txt --per-site 20 --only allrecipes.com,seriouseats.com
     python -m app.cli refresh                 # re-check ratings of everything scraped
     python -m app.cli rewrite --llm           # Claude rewrite (needs ANTHROPIC_API_KEY)
     python -m app.cli samples                 # (re)build the bundled original recipes
@@ -22,16 +24,18 @@ import sys
 from .library import DEFAULT_LIBRARY, Library, sync_library
 from .pipeline import process_recipe
 from .rewrite import apply_rewrite
-from .scraper import DEFAULT_MIN_RATING, PoliteFetcher, crawl, parse_rating, passes_rating, scrape_url
+from .scraper import (DEFAULT_MIN_RATING, PoliteFetcher, crawl, crawl_sites, group_by_site, parse_rating,
+                      passes_rating, read_sources, scrape_url)
 
 SAMPLES_FILE = os.path.join(os.path.dirname(__file__), "data", "sample_recipes.json")
+# Default site list for `scrape-sites`, at the repo root (/srv in the Docker image).
+DEFAULT_SITES_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "recipe_sites.txt")
 
 
 def _read_urls(args) -> list[str]:
     urls = list(args.urls or [])
     if getattr(args, "from_file", None):
-        with open(args.from_file, encoding="utf-8") as f:
-            urls += [ln.strip() for ln in f if ln.strip() and not ln.startswith("#")]
+        urls += read_sources(args.from_file)
     return urls
 
 
@@ -57,6 +61,66 @@ def cmd_scrape(args, fetch=None) -> int:
         print(f"{r.status:10} {r.url}  {r.detail}")
     lib.save()
     print(f"\n{counts} → {len(lib.recipes)} recipes in {args.library}")
+    return 0
+
+
+def cmd_scrape_sites(args, fetch=None) -> int:
+    """Scrape many sites from a text file, each with its own recipe budget."""
+    path = args.sites_file
+    if not os.path.exists(path):
+        print(f"Sites file not found: {path}", file=sys.stderr)
+        return 2
+    sites = group_by_site(read_sources(path))
+    if args.only:
+        wanted = {w.strip().lower().removeprefix("www.") for w in args.only.split(",") if w.strip()}
+        sites = {s: u for s, u in sites.items() if s in wanted}
+    if args.skip:
+        unwanted = {w.strip().lower().removeprefix("www.") for w in args.skip.split(",") if w.strip()}
+        sites = {s: u for s, u in sites.items() if s not in unwanted}
+    if not sites:
+        print(f"No sites to scrape in {path}.", file=sys.stderr)
+        return 2
+    if args.list:
+        for site, urls in sites.items():
+            print(f"{site:32} {len(urls)} start URL(s)")
+        print(f"\n{len(sites)} sites in {path}")
+        return 0
+
+    print(f"Scraping {len(sites)} sites from {path}: up to {args.per_site} recipes"
+          f" / {args.max_pages_per_site} pages each" + (f", {args.max_total} total" if args.max_total else ""))
+    lib = Library(args.library)
+    fetch = fetch or _fetcher(args)
+    per_site: dict[str, dict[str, int]] = {}
+    pending = 0
+
+    def on_result(site, r):
+        nonlocal pending
+        if r.status == "saved":
+            rec = apply_rewrite(process_recipe(r.recipe, r.url), use_llm=args.llm)
+            r.status = lib.upsert(rec)
+            pending += 1
+            if pending >= 10:  # checkpoint long runs
+                lib.save()
+                pending = 0
+        c = per_site.setdefault(site, {})
+        c[r.status] = c.get(r.status, 0) + 1
+        print(f"{r.status:10} {r.url}  {r.detail}", flush=True)
+
+    all_urls = [u for urls in sites.values() for u in urls]
+    crawl_sites(all_urls, fetch, per_site=args.per_site, max_pages_per_site=args.max_pages_per_site,
+                max_total=args.max_total, min_rating=args.min_rating, min_reviews=args.min_reviews,
+                follow_links=not args.no_follow, on_result=on_result)
+    lib.save()
+
+    print("\nPer site:")
+    totals: dict[str, int] = {}
+    for site in sites:
+        c = per_site.get(site, {})
+        for k, v in c.items():
+            totals[k] = totals.get(k, 0) + v
+        summary = ", ".join(f"{k} {v}" for k, v in sorted(c.items())) or "nothing fetched"
+        print(f"  {site:32} {summary}")
+    print(f"\n{totals} → {len(lib.recipes)} recipes in {args.library}")
     return 0
 
 
@@ -183,6 +247,19 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--no-follow", action="store_true")
     scrape_opts(s)
     s.set_defaults(func=cmd_scrape)
+
+    ms = sub.add_parser("scrape-sites", help="scrape many sites listed in a text file (default: recipe_sites.txt)")
+    ms.add_argument("sites_file", nargs="?", default=os.environ.get("SITES_FILE", DEFAULT_SITES_FILE),
+                    help="one URL or domain per line, # for comments")
+    ms.add_argument("--per-site", type=int, default=10, help="max recipes to save per site")
+    ms.add_argument("--max-pages-per-site", type=int, default=40, help="max pages to fetch per site")
+    ms.add_argument("--max-total", type=int, default=0, help="stop after this many recipes overall (0 = no limit)")
+    ms.add_argument("--only", help="comma-separated domains to include, e.g. allrecipes.com,seriouseats.com")
+    ms.add_argument("--skip", help="comma-separated domains to leave out")
+    ms.add_argument("--list", action="store_true", help="show the sites that would be scraped and exit")
+    ms.add_argument("--no-follow", action="store_true")
+    scrape_opts(ms)
+    ms.set_defaults(func=cmd_scrape_sites)
 
     r = sub.add_parser("refresh", help="re-check every scraped recipe")
     scrape_opts(r)

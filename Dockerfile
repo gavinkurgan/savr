@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # The recipe library (app/data/library.json) ships inside the image.
 COPY app ./app
 COPY scripts ./scripts
-COPY wsgi.py .
+COPY wsgi.py recipe_sites.txt ./
 
 RUN useradd --create-home appuser && mkdir -p /data && chown -R appuser /data /srv/app/data
 USER appuser

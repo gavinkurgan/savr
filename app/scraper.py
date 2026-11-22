@@ -10,6 +10,8 @@ ingredients in a consistent shape.
   and it has at least ``min_reviews`` ratings.
 * Can crawl: give it a category/listing page or a sitemap.xml and it follows
   recipe-looking links on the same domain.
+* Multi-site: ``crawl_sites`` takes a list of many sites (see ``recipe_sites.txt``),
+  gives each its own recipe/page budget and takes turns between them.
 """
 from __future__ import annotations
 
@@ -172,19 +174,31 @@ RECIPE_URL_HINT = re.compile(r"/recipes?/|/recipe-|-recipe\b|/\d{4,}/[\w-]+", re
 SKIP_URL_HINT = re.compile(r"/(?:tag|category|author|search|page|login|account|shop|video|collections?)/|[?&]page=|\.(?:jpe?g|png|gif|pdf)$", re.I)
 
 
-def discover_links(html: str, base_url: str, same_domain: bool = True) -> list[str]:
+# Blog posts often live at a bare slug (site.com/one-pot-chili-mac/) with no
+# "recipe" in the path. Multi-site crawls accept those too (3+ hyphenated words).
+LOOSE_SLUG_HINT = re.compile(r"^/[a-z0-9]+(?:-[a-z0-9]+){2,}/?$", re.I)
+
+
+def _host(url: str) -> str:
+    h = urlparse(url).netloc.lower()
+    return h[4:] if h.startswith("www.") else h
+
+
+def discover_links(html: str, base_url: str, same_domain: bool = True, loose: bool = False) -> list[str]:
     soup = BeautifulSoup(html, "lxml")
-    host = urlparse(base_url).netloc
+    host = _host(base_url)
     seen, out = set(), []
     for a in soup.find_all("a", href=True):
         url = urldefrag(urljoin(base_url, a["href"]))[0]
         if not url.startswith("http"):
             continue
-        if same_domain and urlparse(url).netloc != host:
+        if same_domain and _host(url) != host:
             continue
         if url in seen or url.rstrip("/") == base_url.rstrip("/"):
             continue
-        if RECIPE_URL_HINT.search(urlparse(url).path) and not SKIP_URL_HINT.search(url):
+        path = urlparse(url).path
+        looks_like_recipe = RECIPE_URL_HINT.search(path) or (loose and LOOSE_SLUG_HINT.match(path))
+        if looks_like_recipe and not SKIP_URL_HINT.search(url):
             seen.add(url)
             out.append(url)
     return out
@@ -222,36 +236,120 @@ def scrape_url(url: str, fetch: Fetcher, min_rating=DEFAULT_MIN_RATING, min_revi
     return ScrapeResult(url, "saved", f"rating={rating} reviews={count}", raw), html
 
 
+def _is_sitemap(url: str) -> bool:
+    return urlparse(url).path.lower().endswith(".xml")
+
+
+class SiteCrawler:
+    """Crawl state for one set of start URLs. ``step()`` handles one page, so
+    several crawlers can be interleaved (see ``crawl_sites``)."""
+
+    def __init__(self, start_urls: list[str], fetch: Fetcher, *, min_rating=DEFAULT_MIN_RATING,
+                 min_reviews=0, max_recipes=25, max_pages=60, follow_links=True,
+                 allow_unrated=False, loose_links=False):
+        self.queue = [u.strip() for u in start_urls if u and u.strip()]
+        self.fetch = fetch
+        self.min_rating, self.min_reviews, self.allow_unrated = min_rating, min_reviews, allow_unrated
+        self.max_recipes, self.max_pages = max_recipes, max_pages
+        self.follow_links, self.loose_links = follow_links, loose_links
+        self.visited: set[str] = set()
+        self.saved = 0
+        self.results: list[ScrapeResult] = []
+
+    @property
+    def done(self) -> bool:
+        return not self.queue or self.saved >= self.max_recipes or len(self.visited) >= self.max_pages
+
+    def step(self) -> ScrapeResult | None:
+        """Process the next queued URL. Returns its result (None for a sitemap)."""
+        while self.queue and self.queue[0] in self.visited:
+            self.queue.pop(0)
+        if self.done:
+            return None
+        url = self.queue.pop(0)
+        self.visited.add(url)
+        if _is_sitemap(url):  # sitemap or sitemap index: expand, don't score
+            try:
+                for loc in parse_sitemap(self.fetch(url)):
+                    if loc not in self.visited and loc not in self.queue:
+                        self.queue.append(loc)
+            except Exception as e:
+                log.warning("sitemap %s failed: %s", url, e)
+            return None
+        result, html = scrape_url(url, self.fetch, self.min_rating, self.min_reviews, self.allow_unrated)
+        self.results.append(result)
+        if result.status == "saved":
+            self.saved += 1
+        if self.follow_links and html and result.status in ("no_recipe", "saved", "low_rating"):
+            # listing pages (no recipe) are the main source of new links
+            for link in discover_links(html, url, loose=self.loose_links):
+                if link not in self.visited and link not in self.queue:
+                    self.queue.append(link)
+        return result
+
+
 def crawl(start_urls: list[str], fetch: Fetcher, *, min_rating=DEFAULT_MIN_RATING, min_reviews=0,
           max_recipes=25, max_pages=60, follow_links=True, allow_unrated=False) -> list[ScrapeResult]:
-    queue: list[str] = []
-    for u in start_urls:
-        u = u.strip()
-        if not u:
-            continue
-        if u.endswith(".xml"):
-            try:
-                queue.extend(parse_sitemap(fetch(u)))
-            except Exception as e:
-                log.warning("sitemap %s failed: %s", u, e)
-        else:
-            queue.append(u)
+    c = SiteCrawler(start_urls, fetch, min_rating=min_rating, min_reviews=min_reviews,
+                    max_recipes=max_recipes, max_pages=max_pages, follow_links=follow_links,
+                    allow_unrated=allow_unrated)
+    while not c.done:
+        c.step()
+    return c.results
 
-    results: list[ScrapeResult] = []
-    visited: set[str] = set()
-    saved = 0
-    while queue and saved < max_recipes and len(visited) < max_pages:
-        url = queue.pop(0)
-        if url in visited:
-            continue
-        visited.add(url)
-        result, html = scrape_url(url, fetch, min_rating, min_reviews, allow_unrated)
-        results.append(result)
-        if result.status == "saved":
-            saved += 1
-        if follow_links and html and result.status in ("no_recipe", "saved", "low_rating"):
-            # listing pages (no recipe) are the main source of new links
-            for link in discover_links(html, url):
-                if link not in visited and link not in queue:
-                    queue.append(link)
-    return results
+
+# ---------------------------------------------------------------- multi-site
+def read_sources(path: str) -> list[str]:
+    """Read a sources file: one URL per line; ``#`` starts a comment (whole-line or
+    after whitespace). A bare domain such as ``allrecipes.com`` means its homepage."""
+    urls = []
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = re.split(r"(?:^|\s)#", line, maxsplit=1)[0].strip()
+            if not line:
+                continue
+            if "://" not in line:
+                line = "https://" + line.lstrip("/")
+                if urlparse(line).path == "":
+                    line += "/"
+            urls.append(line)
+    return urls
+
+
+def group_by_site(urls: list[str]) -> dict[str, list[str]]:
+    """Group start URLs by site (host without ``www.``), keeping file order."""
+    sites: dict[str, list[str]] = {}
+    for u in urls:
+        sites.setdefault(_host(u), []).append(u)
+    return sites
+
+
+def crawl_sites(start_urls: list[str], fetch: Fetcher, *, per_site=10, max_pages_per_site=40,
+                max_total=0, min_rating=DEFAULT_MIN_RATING, min_reviews=0, follow_links=True,
+                allow_unrated=False, on_result: Callable[[str, ScrapeResult], None] | None = None,
+                ) -> dict[str, list[ScrapeResult]]:
+    """Crawl many sites with a separate recipe/page budget for each, taking turns
+    between sites one page at a time. Taking turns spreads requests out, so the
+    per-host delay rarely makes the crawl wait. ``max_total`` (0 = no limit) caps
+    recipes saved across all sites. Returns {site: results}."""
+    crawlers = {
+        site: SiteCrawler(urls, fetch, min_rating=min_rating, min_reviews=min_reviews,
+                          max_recipes=per_site, max_pages=max_pages_per_site,
+                          follow_links=follow_links, allow_unrated=allow_unrated, loose_links=True)
+        for site, urls in group_by_site(start_urls).items()
+    }
+    total = 0
+    active = [s for s, c in crawlers.items() if not c.done]
+    while active and not (max_total and total >= max_total):
+        for site in list(active):
+            if max_total and total >= max_total:
+                break
+            c = crawlers[site]
+            result = c.step()
+            if result is not None:
+                total += result.status == "saved"
+                if on_result:
+                    on_result(site, result)
+            if c.done:
+                active.remove(site)
+    return {site: c.results for site, c in crawlers.items()}
